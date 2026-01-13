@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Strategy & Dashboard Demos - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            color: #111827;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f2613f;
+            margin-bottom: 0.5rem;
+        }
+
+        .hub-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .hub-banner:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .hub-banner-icon {
+            font-size: 1.5rem;
+        }
+
+        .hub-banner-text {
+            flex: 1;
+        }
+
+        .hub-banner-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .hub-banner-subtitle {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .hub-banner-arrow {
+            font-size: 1.25rem;
+            opacity: 0.8;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .subtitle {
+            font-size: 0.9375rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-top: 4px solid #f2613f;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #111827;
+        }
+
+        .card-description {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .card-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9375rem;
+            color: #4b5563;
+        }
+
+        .feature-icon {
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .card-link {
+            display: inline-block;
+            padding: 0.875rem 1.75rem;
+            background: linear-gradient(135deg, #f2613f 0%, #d84315 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .card-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 97, 63, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .tech-stack {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .tech-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #111827;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            padding: 0.375rem 0.75rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            color: #6b7280;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: #f2613f;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Product Strategy & Analytics Portfolio</h1>
+            <p>Interactive Dashboards & Strategic Frameworks</p>
+            <p class="subtitle">Demonstrating product-led growth, data-driven prioritization, and cross-functional alignment</p>
+            <a href="./product-ops-hub.html" class="hub-banner">
+                <span class="hub-banner-icon">🚀</span>
+                <div class="hub-banner-text">
+                    <div class="hub-banner-title">Open Product Operations Hub</div>
+                    <div class="hub-banner-subtitle">All tools in one place: Feedback Dashboard + Launch Calendar + Checklists</div>
+                </div>
+                <span class="hub-banner-arrow">→</span>
+            </a>
+        </div>
+
+        <div class="grid">
+            <!-- Strategic Analysis Dashboard -->
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <span class="badge">RICE • Kano • JTBD</span>
+                <div class="card-title">Strategic Analysis Dashboard</div>
+                <div class="card-description">
+                    Comprehensive product strategy framework with RICE prioritization, Kano model analysis, and Jobs-to-be-Done insights. Features 10+ interactive charts built with Chart.js.
+                </div>
+                <div class="card-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>RICE scoring with quantitative prioritization</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Kano model: Basic vs Performance vs Delighters</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Jobs-to-be-Done with opportunity scores</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Interactive charts (sentiment, NPS, cohorts)</span>
+                    </div>
+                </div>
+                <a href="./dashboard-mockup-v5-charts-strategy.html" class="card-link">View Dashboard →</a>
+            </div>
+
+            <!-- Sales-Engineering Sync -->
+            <div class="card">
+                <div class="card-icon">🗺️</div>
+                <span class="badge">Live Sync from Linear</span>
+                <div class="card-title">Sales-Engineering Roadmap Sync</div>
+                <div class="card-description">
+                    Real-time product roadmap that prevents overselling by syncing directly from Linear. Shows what Sales can sell NOW vs what's in development.
+                </div>
+                <div class="card-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>GA/Beta/In Dev status with clear guidance</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Engineering progress bars (% complete)</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Customer demand tracking ($ARR at risk)</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Slack notifications for status changes</span>
+                    </div>
+                </div>
+                <a href="./sales-roadmap-sync-mockup.html" class="card-link">View Roadmap →</a>
+            </div>
+
+            <!-- Interactive Launch Calendar -->
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <span class="badge">Interactive • Click to Explore</span>
+                <div class="card-title">Interactive Launch Calendar 2026</div>
+                <div class="card-description">
+                    Gantt-style launch calendar with filtering, modal details, and two view modes. Click any launch to see Linear issues, progress, and customer demand.
+                </div>
+                <div class="card-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Calendar view: 12-month timeline</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Timeline view: Quarterly breakdown</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Filter by status (GA/Beta/In Dev) or team</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Click launches for detailed modal</span>
+                    </div>
+                </div>
+                <a href="./interactive-launch-calendar.html" class="card-link">View Calendar →</a>
+            </div>
+
+            <!-- Feedback Dashboard -->
+            <div class="card">
+                <div class="card-icon">💬</div>
+                <span class="badge">Real Data Scraped</span>
+                <div class="card-title">Product Feedback Dashboard</div>
+                <div class="card-description">
+                    Aggregated feedback from GitHub, Reddit, and Hacker News with user enrichment, health scoring, and automatic roadmap linkage.
+                </div>
+                <div class="card-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Real data from GitHub issues, Reddit, HN</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>User enrichment (tier, ARR, health score)</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Priority boosting for at-risk customers</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Integrations & AI tab showing architecture</span>
+                    </div>
+                </div>
+                <a href="./dashboard-mockup-v4-real-data.html" class="card-link">View Feedback →</a>
+            </div>
+
+            <!-- Launch Checklist -->
+            <div class="card">
+                <div class="card-icon">✅</div>
+                <span class="badge">100+ Items • Best Practices</span>
+                <div class="card-title">Launch Checklist System</div>
+                <div class="card-description">
+                    Dynamic launch checklists with team-specific playbooks, minimal required meetings, and full feedback loop integration.
+                </div>
+                <div class="card-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>6 launch types with tailored checklists</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Linear sync, Slack integration, Calendar</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Team playbooks (Eng, Legal, Marketing, etc.)</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Notify users who requested features on launch</span>
+                    </div>
+                </div>
+                <a href="./launch-checklist.html" class="card-link">View Checklist →</a>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <div class="tech-title">🛠️ Technologies & Frameworks Demonstrated</div>
+            <div class="tech-tags">
+                <span class="tech-tag">RICE Prioritization</span>
+                <span class="tech-tag">Kano Model</span>
+                <span class="tech-tag">Jobs-to-be-Done</span>
+                <span class="tech-tag">Chart.js</span>
+                <span class="tech-tag">Product Analytics</span>
+                <span class="tech-tag">Linear Integration</span>
+                <span class="tech-tag">Customer Health Scoring</span>
+                <span class="tech-tag">Data Enrichment</span>
+                <span class="tech-tag">Web Scraping (GitHub, Reddit, HN)</span>
+                <span class="tech-tag">Real-time Sync</span>
+                <span class="tech-tag">Interactive UI/UX</span>
+                <span class="tech-tag">Product-Led Growth</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Built as a portfolio demonstration of product strategy and data visualization capabilities.</p>
+            <p style="margin-top: 0.5rem;">All data is for demonstration purposes • Example use case: Mistral AI</p>
+        </div>
+    </div>
+</body>
+</html>
