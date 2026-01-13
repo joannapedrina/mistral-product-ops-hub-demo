@@ -6,6 +6,23 @@ A comprehensive product operations dashboard demonstrating how modern product te
 
 ---
 
+## What This Is
+
+> **This is an interactive UI prototype + technical specification.**
+>
+> The demo shows the user experience with sample data. The documentation below describes how a production version would be built with real integrations and AI.
+
+| Layer | Status |
+|-------|--------|
+| **UI/UX Design** | ✅ Complete - Interactive HTML prototype |
+| **Sample Data** | ✅ Complete - Realistic example content |
+| **Backend API** | 📋 Specified - Not yet implemented |
+| **Database** | 📋 Specified - Not yet implemented |
+| **AI Integration** | 📋 Specified - Not yet implemented |
+| **Connectors** | 📋 Specified - Not yet implemented |
+
+---
+
 ## What This Demonstrates
 
 This prototype showcases a unified product ops system that solves common challenges:
