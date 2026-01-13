@@ -140,6 +140,176 @@ Query: find all customers who requested this
 Send: in-app message, email, Intercom campaign
 ```
 
+## AI Triage System
+
+The AI layer processes every piece of feedback before it hits the dashboard. Here's how it works:
+
+### Pipeline Overview
+
+```
+Raw Feedback (Intercom, Zendesk, etc.)
+    |
+    v
++-------------------+
+|  Ingestion Queue  |  (BullMQ)
++-------------------+
+    |
+    v
++-------------------+
+|  AI Triage Job    |  (Mistral API)
++-------------------+
+    |
+    +---> Categorization
+    +---> Sentiment Analysis
+    +---> Priority Scoring
+    +---> Tag Extraction
+    +---> Duplicate Detection
+    |
+    v
++-------------------+
+|  Enriched Record  |  (PostgreSQL)
++-------------------+
+    |
+    v
+Dashboard displays processed feedback
+```
+
+### What the AI Does
+
+**1. Categorization**
+
+The AI reads the feedback and assigns a category:
+
+| Category | Examples |
+|----------|----------|
+| Bug | "API returns 500 error", "Dashboard won't load" |
+| Feature Request | "Would love batch processing", "Need SAML support" |
+| Improvement | "Docs could be clearer", "Latency is a bit high" |
+| Question | "How do I rotate API keys?", "What's the rate limit?" |
+| Complaint | "Been waiting 3 days for support", "This is frustrating" |
+| Praise | "Love the new embeddings!", "Your team is amazing" |
+
+**2. Sentiment Scoring**
+
+Returns a score from -1 to +1:
+
+| Score | Label | Signals |
+|-------|-------|---------|
+| 0.5 to 1.0 | Positive | Happy customer, praise, satisfaction |
+| -0.3 to 0.5 | Neutral | Questions, normal requests |
+| -1.0 to -0.3 | Negative | Frustration, urgency, complaints |
+
+**3. Priority Inference**
+
+AI suggests priority based on:
+- Customer tier (Enterprise > Pro > Free)
+- Severity language ("production down" vs "minor inconvenience")
+- Revenue at risk (ARR from CRM lookup)
+- Historical churn signals
+
+```
+Priority Score = (Tier Weight x 3) + (Severity x 2) + (Revenue x 1)
+
+Enterprise + Production Issue + High ARR = Critical
+Free + Nice-to-have + Low ARR = Low
+```
+
+**4. Smart Tagging**
+
+Extracts technical keywords and product areas:
+
+| Input | Tags Generated |
+|-------|----------------|
+| "Getting 429 errors on embeddings endpoint" | rate-limit, embeddings, api-error |
+| "Fine-tuning job stuck at 80%" | fine-tuning, training, stuck |
+| "Need SSO for our team" | sso, enterprise, authentication |
+
+**5. Duplicate Detection**
+
+Uses embeddings to find similar feedback:
+
+1. Generate embedding vector for new feedback
+2. Compare against existing feedback (cosine similarity)
+3. If similarity > 0.85 and within 30 days, flag as potential duplicate
+4. Link to parent issue for grouping
+
+### Triage Prompt Example
+
+```
+You are analyzing customer feedback for a product ops dashboard.
+
+Feedback:
+Title: {title}
+Message: {message}
+Customer: {company} ({plan} plan, ${arr} ARR)
+
+Tasks:
+1. Categorize: bug, feature_request, improvement, question, complaint, praise
+2. Sentiment score: -1.0 to 1.0
+3. Priority: critical, high, medium, low (explain reasoning)
+4. Tags: up to 5 technical keywords
+5. Product area: API, Dashboard, Fine-tuning, Embeddings, Billing, Docs
+6. Similar issues: any patterns you notice
+
+Return JSON.
+```
+
+### Processing Queue
+
+Feedback processing happens async via job queue:
+
+| Job Type | Trigger | Timing |
+|----------|---------|--------|
+| New feedback | Webhook from source | Immediate |
+| Re-triage | Manual or bulk update | On demand |
+| Embedding refresh | New model available | Scheduled |
+
+### AI Model Choice
+
+| Task | Model | Why |
+|------|-------|-----|
+| Categorization + Sentiment | Mistral Small | Fast, cheap, accurate for classification |
+| Priority reasoning | Mistral Medium | Needs context awareness |
+| Embedding generation | Mistral Embed | Vector search for duplicates |
+| Complex analysis | Mistral Large | Sales call transcripts, long context |
+
+### Output Structure
+
+After AI processing, each feedback item has:
+
+```javascript
+{
+  // Original fields
+  id: "fb_12345",
+  title: "Rate limiting issues",
+  description: "...",
+
+  // AI-generated fields
+  ai_triage: {
+    category: "bug",
+    sentiment_score: -0.4,
+    sentiment_label: "negative",
+    priority: "high",
+    priority_reasoning: "Enterprise customer, production impact",
+    tags: ["rate-limit", "api", "429"],
+    product_area: "API",
+    similar_items: ["fb_11234", "fb_10998"],
+    processed_at: "2026-01-10T14:35:00Z",
+    model_version: "mistral-small-2024"
+  }
+}
+```
+
+### Human Override
+
+AI suggestions are just that. PMs can:
+- Change category or priority
+- Add/remove tags
+- Mark false duplicates
+- Flag for re-processing
+
+Every override gets logged for model improvement.
+
 ## Connector Pattern
 
 Each source uses an adapter:
