@@ -1,430 +1,251 @@
-# Product Operations Hub - Interactive Demo
+# Product Operations Hub
 
-A comprehensive product operations dashboard demonstrating how modern product teams can centralize feedback, track launches, and maintain alignment across Engineering, Sales, and Leadership.
+A product operations dashboard showing how teams can centralize feedback, track launches, and stay aligned across Engineering, Sales, and Leadership.
 
-**[View Live Demo →](https://joannapedrina.github.io/mistral-product-ops-hub-demo/)**
-
----
+**[View Live Demo](https://joannapedrina.github.io/mistral-product-ops-hub-demo/)**
 
 ## What This Is
 
-> **This is an interactive UI prototype + technical specification.**
->
-> The demo shows the user experience with sample data. The documentation below describes how a production version would be built with real integrations and AI.
+**This is a UI prototype + technical spec.**
+
+The demo shows the user experience with sample data. The docs below describe how you'd build the real thing.
 
 | Layer | Status |
 |-------|--------|
-| **UI/UX Design** | ✅ Complete - Interactive HTML prototype |
-| **Sample Data** | ✅ Complete - Realistic example content |
-| **Backend API** | 📋 Specified - Not yet implemented |
-| **Database** | 📋 Specified - Not yet implemented |
-| **AI Integration** | 📋 Specified - Not yet implemented |
-| **Connectors** | 📋 Specified - Not yet implemented |
+| UI/UX Design | Done |
+| Sample Data | Done |
+| Backend API | Spec only |
+| Database | Spec only |
+| AI Integration | Spec only |
+| Connectors | Spec only |
 
----
-
-## What This Demonstrates
-
-This prototype showcases a unified product ops system that solves common challenges:
+## The Problem
 
 | Challenge | Solution |
 |-----------|----------|
-| Feedback scattered across tools | Unified dashboard aggregating all sources |
-| Sales doesn't know what's shipping | Live launch calendar with status filters |
-| Launch readiness is unclear | Dynamic checklists with team playbooks |
-| No single source of truth | Integrated hub connecting all views |
+| Feedback scattered across tools | Unified dashboard pulling from all sources |
+| Sales doesn't know what's shipping | Launch calendar with status filters |
+| Launch readiness unclear | Checklists with team playbooks |
+| No single source of truth | Hub connecting all views |
 
----
-
-## System Architecture
+## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      PRODUCT OPERATIONS HUB                          │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
-│  │   Feedback   │  │    Launch    │  │    Launch    │              │
-│  │  Dashboard   │  │   Calendar   │  │  Checklists  │              │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘              │
-│         │                 │                 │                        │
-│         └────────────────┼────────────────┘                        │
-│                          │                                          │
-│                    ┌─────▼─────┐                                    │
-│                    │  Unified  │                                    │
-│                    │    API    │                                    │
-│                    └─────┬─────┘                                    │
-│                          │                                          │
-└──────────────────────────┼──────────────────────────────────────────┘
-                           │
-        ┌──────────────────┼──────────────────┐
-        │                  │                  │
-   ┌────▼────┐       ┌────▼────┐       ┌────▼────┐
-   │ Intercom│       │  Linear │       │  Gong   │
-   │ Zendesk │       │  Jira   │       │ Chorus  │
-   │ Support │       │ GitHub  │       │  Calls  │
-   └─────────┘       └─────────┘       └─────────┘
-    Customer          Engineering        Sales
-    Feedback          Tracking          Insights
+                    PRODUCT OPERATIONS HUB
+    +--------------------------------------------------+
+    |                                                  |
+    |   Feedback       Launch         Launch           |
+    |   Dashboard      Calendar       Checklists       |
+    |       |             |              |             |
+    |       +-------------+-------------+              |
+    |                     |                            |
+    |               Unified API                        |
+    |                     |                            |
+    +---------------------|----------------------------+
+                          |
+        +-----------------+------------------+
+        |                 |                  |
+    Intercom          Linear             Gong
+    Zendesk           Jira               Chorus
+    Support           GitHub             Calls
 ```
-
----
 
 ## Components
 
-### 1. Product Operations Hub (`product-ops-hub.html`)
+### Product Operations Hub
+Main command center with tabs:
+- Overview: key metrics
+- Feedback Dashboard: aggregated customer feedback
+- Launch Calendar: interactive roadmap
+- Launch Checklists: team playbooks
 
-The central command center with tabbed navigation:
+### Feedback Dashboard
+Pulls from multiple sources:
 
-- **Overview** - Executive summary with key metrics
-- **Feedback Dashboard** - Aggregated customer feedback
-- **Launch Calendar** - Interactive roadmap view
-- **Launch Checklists** - Team-specific playbooks
+| Support | Product | Sales |
+|---------|---------|-------|
+| Intercom | Linear | Gong recordings |
+| Zendesk | GitHub Issues | Chorus transcripts |
+| Help Scout | Canny | CRM notes |
 
-### 2. Feedback Dashboard (`dashboard-mockup-v4-real-data.html`)
+**AI does the heavy lifting:**
+- Categorizes: Bug, Feature Request, Improvement, Question
+- Scores sentiment: Positive/Neutral/Negative
+- Suggests priority based on customer tier + severity
+- Tags with technical keywords and product areas
+- Detects duplicates using embeddings
 
-Demonstrates intelligent feedback aggregation:
+**Customer enrichment:**
+- Looks up company, ARR, plan from CRM
+- Boosts priority for at-risk customers
+- Shows historical context (previous tickets, requests)
 
-**Data Sources (Connectors)**
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    FEEDBACK SOURCES                          │
-├─────────────────┬─────────────────┬─────────────────────────┤
-│   SUPPORT       │   PRODUCT       │   SALES                 │
-├─────────────────┼─────────────────┼─────────────────────────┤
-│ • Intercom      │ • Linear        │ • Gong recordings       │
-│ • Zendesk       │ • GitHub Issues │ • Chorus transcripts    │
-│ • Help Scout    │ • Canny         │ • CRM notes             │
-│                 │ • ProductBoard  │ • Call summaries        │
-└─────────────────┴─────────────────┴─────────────────────────┘
-```
+### Launch Calendar
+Two views:
+- Calendar: 12-month grid
+- Timeline: quarterly breakdown
 
-**AI-Powered Features**
-- **Auto-categorization**: Bug, Feature Request, Improvement, Question
-- **Sentiment Analysis**: Positive/Neutral/Negative scoring
-- **Priority Inference**: Based on customer tier + severity + frequency
-- **Smart Tagging**: Technical keywords, product areas, urgency signals
-- **Duplicate Detection**: Embedding-based similarity matching
+Filters by status (Shipped, Beta, In Dev, At Risk) and team (Engineering, ML, Product).
 
-**Customer Enrichment**
-```
-Feedback Item
-    │
-    ├── Customer Email ──→ CRM Lookup ──→ Company, ARR, Plan
-    │
-    ├── Health Score ──→ At-risk customers get priority boost
-    │
-    └── Historical Context ──→ Previous tickets, feature requests
-```
+Syncs with Linear/Jira for real status. Links back to customer requests.
 
-### 3. Launch Calendar (`interactive-launch-calendar.html`)
+### Launch Checklists
 
-Interactive roadmap with real-time filtering:
+| Launch Type | Complexity |
+|-------------|------------|
+| Major Model Release | High |
+| API/Platform Update | Medium |
+| Enterprise Feature | Medium |
+| Experimental/Beta | Low |
+| Bug Fix / Hotfix | Low |
+| Documentation | Low |
 
-**Views**
-- **Calendar View**: 12-month grid showing all launches
-- **Timeline View**: Quarterly breakdown with details
+Each team gets their own checklist:
+- Engineering: tests, docs, monitoring, rollback plan
+- Marketing: blog, social, email, landing page
+- Sales: battlecards, demo, pricing, FAQ
+- Legal: ToS, privacy, compliance
+- Support: KB articles, training, escalation paths
 
-**Filters**
-- **By Status**: All | Shipped | Beta | In Dev | At Risk
-- **By Team**: All Teams | Engineering | ML Research | Product
+## Data Flow
 
-**Data Model**
-```javascript
-{
-  "launch": {
-    "name": "CPU Inference Optimization",
-    "status": "shipped",           // shipped, beta, in-dev, at-risk, research
-    "team": "engineering",         // engineering, ml, product
-    "target_date": "2026-01-10",
-    "progress": 100,
-    "linear_project": "MIS-2024-CPU",
-    "customer_demand": {
-      "requesting_customers": 18,
-      "total_arr": 145000
-    }
-  }
-}
-```
-
-**Integration Points**
-- Syncs with Linear/Jira for real project status
-- Links to customer requests from feedback dashboard
-- Triggers checklist generation on launch creation
-
-### 4. Launch Checklists (`launch-checklist.html`)
-
-Dynamic, role-based launch playbooks:
-
-**Launch Types**
-| Type | Complexity | Example |
-|------|------------|---------|
-| Major Model Release | High | Mistral Large 4 |
-| API/Platform Update | Medium | New endpoints, SDK updates |
-| Enterprise Feature | Medium | SSO, audit logs |
-| Experimental/Beta | Low | Research previews |
-| Bug Fix / Hotfix | Low | Critical patches |
-| Documentation | Low | New guides, tutorials |
-
-**Team Playbooks**
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    LAUNCH CHECKLIST                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ENGINEERING        MARKETING         SALES                 │
-│  ☑ Tests passing    ☑ Blog post       ☑ Battlecards        │
-│  ☑ Docs updated     ☑ Social copy     ☑ Demo ready         │
-│  ☑ Monitoring       ☑ Email draft     ☑ Pricing sheet      │
-│  ☑ Rollback plan    ☑ Landing page    ☑ FAQ document       │
-│                                                              │
-│  LEGAL              SUPPORT           LEADERSHIP            │
-│  ☑ ToS review       ☑ KB articles     ☑ Exec briefing      │
-│  ☑ Privacy check    ☑ Team training   ☑ Board update       │
-│  ☑ Compliance       ☑ Escalation      ☑ Press prep         │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**Smart Features**
-- Tasks auto-assigned based on launch type
-- Minimal required meetings (async-first)
-- Integration with Linear for task tracking
-- Slack notifications for blockers
-- Auto-notify customers who requested features
-
----
-
-## Data Flow: How It All Connects
-
-### 1. Feedback → Roadmap Pipeline
-
+**Feedback to Roadmap:**
 ```
 Customer submits feedback (Intercom)
-         │
-         ▼
-┌─────────────────────────┐
-│   AI Triage Pipeline    │
-│  • Categorize           │
-│  • Extract features     │
-│  • Score priority       │
-│  • Detect duplicates    │
-└──────────┬──────────────┘
-           │
-           ▼
-┌─────────────────────────┐
-│   Feedback Dashboard    │
-│  • Aggregate by theme   │
-│  • Track voting         │
-│  • Link to customers    │
-└──────────┬──────────────┘
-           │
-           ▼
+    |
+    v
+AI triage: categorize, score, detect duplicates
+    |
+    v
+Feedback Dashboard: aggregate by theme, track votes
+    |
+    v
 PM reviews top requests
-           │
-           ▼
-Creates Linear project ──────────────▶ Launch Calendar
-           │
-           ▼
-Generates checklist ─────────────────▶ Launch Checklists
+    |
+    v
+Creates Linear project --> appears in Launch Calendar
+    |
+    v
+Generates checklist --> Launch Checklists
 ```
 
-### 2. Launch → Customer Notification
-
+**Launch to Customer Notification:**
 ```
-Feature ships (status: shipped)
-         │
-         ▼
-┌─────────────────────────┐
-│  Feedback Dashboard     │
-│  Query: all customers   │
-│  who requested this     │
-└──────────┬──────────────┘
-           │
-           ▼
-┌─────────────────────────┐
-│  Notification System    │
-│  • In-app message       │
-│  • Email announcement   │
-│  • Intercom campaign    │
-└─────────────────────────┘
+Feature ships
+    |
+    v
+Query: find all customers who requested this
+    |
+    v
+Send: in-app message, email, Intercom campaign
 ```
 
-### 3. Sales ↔ Product Sync
+## Connector Pattern
 
-```
-Sales call recorded (Gong)
-         │
-         ▼
-┌─────────────────────────┐
-│   AI Call Analysis      │
-│  • Extract pain points  │
-│  • Feature requests     │
-│  • Competitor mentions  │
-│  • Objections           │
-└──────────┬──────────────┘
-           │
-           ▼
-Feeds into Feedback Dashboard
-           │
-           ▼
-Sales can check Launch Calendar
-for "When is X shipping?"
-```
-
----
-
-## Integration Architecture
-
-### Connector Pattern
-
-Each data source uses an adapter pattern:
+Each source uses an adapter:
 
 ```javascript
 interface DataSourceAdapter {
-  // Authentication
   authenticate(): Promise<void>;
-
-  // Data fetching
-  fetchFeedback(params: FetchParams): Promise<FeedbackItem[]>;
+  fetchFeedback(params): Promise<FeedbackItem[]>;
   fetchIncremental(since: Date): Promise<FeedbackItem[]>;
-
-  // Normalization
-  transformToStandard(raw: any): FeedbackItem;
+  transformToStandard(raw): FeedbackItem;
 }
 ```
 
-### Sync Strategies
+Sync strategies:
+- Batch: daily at 2am for backfill
+- Incremental: every 15 min for recent updates
+- Webhook: real-time for new items
 
-| Strategy | Frequency | Use Case |
-|----------|-----------|----------|
-| **Batch** | Daily 2am | Historical backfill |
-| **Incremental** | Every 15 min | Recent updates |
-| **Webhook** | Real-time | New items, status changes |
+## Unified Data Model
 
-### Unified Data Model
-
-All feedback normalized to:
+All feedback normalizes to:
 
 ```javascript
 {
-  "id": "fb_12345",
-  "source": "intercom",
-  "source_id": "conv_abc123",
-
-  "title": "Need CPU inference support",
-  "description": "We can't use GPUs in our edge deployment...",
-
-  "category": "feature_request",
-  "priority": "high",
-  "sentiment_score": -0.3,
-
-  "customer": {
-    "id": "cust_789",
-    "email": "user@company.com",
-    "company": "Acme Corp",
-    "tier": "enterprise",
-    "arr": 50000,
-    "health_score": 72
+  id: "fb_12345",
+  source: "intercom",
+  source_id: "conv_abc123",
+  title: "Need CPU inference support",
+  description: "We can't use GPUs in our edge deployment...",
+  category: "feature_request",
+  priority: "high",
+  sentiment_score: -0.3,
+  customer: {
+    id: "cust_789",
+    email: "user@company.com",
+    company: "Acme Corp",
+    tier: "enterprise",
+    arr: 50000,
+    health_score: 72
   },
-
-  "tags": ["cpu", "edge", "deployment", "infrastructure"],
-  "product_area": "inference",
-
-  "created_at": "2026-01-10T14:30:00Z",
-  "status": "open"
+  tags: ["cpu", "edge", "deployment"],
+  product_area: "inference",
+  created_at: "2026-01-10T14:30:00Z",
+  status: "open"
 }
 ```
 
----
+## Tech Stack (Production)
 
-## Technical Stack (Production Implementation)
+| Layer | Tech |
+|-------|------|
+| Frontend | Next.js 15, React, TypeScript |
+| UI | Shadcn/ui, Tailwind |
+| Charts | Recharts |
+| State | Zustand, TanStack Query |
+| Backend | Next.js API Routes |
+| Database | PostgreSQL |
+| Cache | Redis (Upstash) |
+| Queue | BullMQ |
+| AI | Mistral API |
+| Auth | Auth.js |
+| Hosting | Vercel |
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | Next.js 15, React, TypeScript |
-| **UI Components** | Shadcn/ui, Tailwind CSS |
-| **Charts** | Recharts / ApexCharts |
-| **State** | Zustand, TanStack Query |
-| **Backend** | Next.js API Routes |
-| **Database** | PostgreSQL + TimescaleDB |
-| **Cache** | Redis (Upstash) |
-| **Queue** | BullMQ |
-| **AI/ML** | Mistral API (categorization, embeddings) |
-| **Auth** | Auth.js (NextAuth) |
-| **Hosting** | Vercel |
+## Design Principles
 
----
+**Clarity over complexity**
+- Show summary first, details on click
+- Max 3-4 metrics per screen
+- No jargon
 
-## Key Design Principles
+**Honest data**
+- Y-axis starts at 0
+- Show sample sizes
+- Display when data was last updated
 
-### 1. Clarity Over Complexity
-- Progressive disclosure: summary first, details on demand
-- Maximum 3-4 key metrics per screen
-- No jargon, clear labels
-
-### 2. Honest Data Representation
-- Y-axis always starts at 0 for bar charts
-- Show sample sizes and confidence levels
-- Display data freshness ("Updated 5 min ago")
-
-### 3. Human-Friendly Visualizations
-- Use median, not just mean (robust to outliers)
-- Show distributions, not just averages
-- Color-blind safe palettes
-
-### 4. Actionable Insights
+**Actionable**
 - Every metric links to underlying data
-- Clear next steps, not just numbers
-- Priority = Impact × Urgency × Customer Value
+- Priority = Impact x Urgency x Customer Value
 
----
-
-## Files Structure
+## Files
 
 ```
-/
-├── index.html                      # Portfolio landing page
-├── product-ops-hub.html            # Main hub with tabbed navigation
-├── dashboard-mockup-v4-real-data.html  # Feedback dashboard
-├── interactive-launch-calendar.html    # Launch calendar with filters
-├── launch-checklist.html           # Dynamic launch checklists
-└── README.md                       # This file
+index.html                       # Landing page
+product-ops-hub.html             # Main hub
+dashboard-mockup-v4-real-data.html   # Feedback dashboard
+interactive-launch-calendar.html     # Calendar
+launch-checklist.html            # Checklists
+README.md                        # This file
 ```
 
----
+## Try It
 
-## Demo Walkthrough
+1. Open the Hub
+2. Check the Overview tab
+3. Explore Feedback (filter by source, category)
+4. Check Calendar (toggle views, filter by team)
+5. View Checklists (pick a launch type)
 
-1. **Start at the Hub** → Click "Product Operations Hub"
-2. **Review Overview** → See key metrics and status
-3. **Explore Feedback** → Filter by source, category, sentiment
-4. **Check Calendar** → Toggle views, filter by status/team
-5. **View Checklists** → Select a launch type, see team playbooks
+## Future
 
----
-
-## Future Enhancements
-
-- [ ] Real-time WebSocket updates
-- [ ] Slack bot for notifications
+- [ ] Real-time updates via WebSocket
+- [ ] Slack bot
 - [ ] Custom dashboard builder
-- [ ] API for external integrations
-- [ ] Mobile-responsive views
+- [ ] Mobile views
 - [ ] Dark mode
 
----
+Built with HTML, CSS, vanilla JS.
 
-## About
-
-This demo was built to showcase product operations best practices, combining:
-- Modern dashboard design (inspired by Linear, Notion, Stripe)
-- AI-powered feedback triage
-- Cross-functional visibility
-- Async-first launch processes
-
-**Built with**: HTML, CSS, JavaScript (vanilla for demo portability)
-
----
-
-*All data shown is for demonstration purposes. Example use case: Mistral AI.*
+*Sample data for demo purposes. Example use case: Mistral AI.*
