@@ -310,6 +310,87 @@ AI suggestions are just that. PMs can:
 
 Every override gets logged for model improvement.
 
+### Important: Validating AI Triage Before Relying On It
+
+AI triage is only useful if it's accurate. Don't deploy it blindly. Here's how to validate:
+
+**Step 1: Create a Test Set**
+
+Take 50-100 feedback items you've already manually categorized. Run them through the AI and compare:
+
+```
+Manual: Bug, High Priority
+AI:     Bug, High Priority  ✓
+
+Manual: Feature Request, Medium
+AI:     Improvement, Low    ✗ (wrong)
+```
+
+Target accuracy:
+- Category: 85%+
+- Priority: 80%+
+- Sentiment direction: 90%+
+
+If you're below these thresholds, fix the prompt before deploying.
+
+**Step 2: Shadow Mode**
+
+Run AI triage alongside human triage for 2-3 weeks:
+
+```
+Feedback arrives
+    |
+    +--> Human triages (source of truth)
+    |
+    +--> AI triages (logged separately)
+    |
+    v
+Weekly review: where did AI disagree?
+```
+
+This shows you exactly where AI struggles without any risk.
+
+**Step 3: Watch for Common Failures**
+
+| Problem | Example | Fix |
+|---------|---------|-----|
+| Sarcasm missed | "Great, another outage" marked Positive | Add sarcasm examples to prompt |
+| Missing context | "This blocks us" - blocks what? | Include more context |
+| Priority inflation | Everything marked High | Calibrate with real ARR thresholds |
+| Edge cases | Bug reports phrased as questions | Add examples to prompt |
+
+**Step 4: Build a Feedback Loop**
+
+Add a simple UI for corrections:
+
+```
+[AI says: Bug, High Priority]
+[Correct?  ✓ Yes  |  ✗ No]
+    If No: [Select correct category] [Select correct priority]
+```
+
+Log every correction. Review monthly and update the prompt.
+
+**Step 5: Track What Matters**
+
+Don't obsess over raw accuracy. Track:
+
+| Metric | Why It Matters |
+|--------|----------------|
+| False negatives on Critical | Did AI miss something urgent? |
+| Override rate | If >30%, AI isn't helping |
+| Time saved per PM | Are they actually triaging faster? |
+
+**Minimum Test Before Building**
+
+Before writing any pipeline code:
+
+1. Export 20 real Intercom conversations
+2. Paste each into Mistral with your triage prompt
+3. Compare AI output to what a PM would say
+4. If accuracy is good, build the pipeline
+5. If not, iterate on the prompt first
+
 ## Connector Pattern
 
 Each source uses an adapter:
