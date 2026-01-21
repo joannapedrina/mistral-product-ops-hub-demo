@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Design Program Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+            color: white;
+            padding: 2rem 2rem 3rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -2rem auto 2rem;
+            padding: 0 2rem;
+        }
+
+        /* Summary Section */
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #7C3AED;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #7C3AED;
+        }
+
+        .summary-subtitle {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: #111827;
+        }
+
+        .summary-text {
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .approach-item {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #7C3AED;
+        }
+
+        .approach-item strong {
+            color: #7C3AED;
+        }
+
+        .principles-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .principle {
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: #EDE9FE;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+        }
+
+        .principle-icon {
+            color: #7C3AED;
+            font-weight: bold;
+        }
+
+        /* Timeline */
+        .timeline-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #E5E7EB;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #7C3AED;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-dot.checkpoint {
+            background: #F59E0B;
+        }
+
+        .timeline-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .timeline-duration {
+            font-size: 0.625rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+
+        /* Phase Tabs */
+        .phase-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .phase-tab {
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .phase-tab:hover {
+            border-color: #7C3AED;
+        }
+
+        .phase-tab.active {
+            background: #7C3AED;
+            color: white;
+            border-color: #7C3AED;
+        }
+
+        .phase-tab-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .phase-tab.active .phase-tab-number {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Phase Content */
+        .phase-content {
+            display: none;
+        }
+
+        .phase-content.active {
+            display: block;
+        }
+
+        .phase-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .phase-meta {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .phase-progress {
+            text-align: right;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #7C3AED;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        /* Checklist */
+        .checklist-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .checklist-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checklist-item:hover {
+            background: #EDE9FE;
+        }
+
+        .checklist-item.completed {
+            background: #ECFDF5;
+        }
+
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D1D5DB;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checklist-item.completed .checklist-checkbox {
+            background: #10B981;
+            border-color: #10B981;
+            color: white;
+        }
+
+        .checklist-text {
+            flex: 1;
+            font-size: 0.9375rem;
+            color: #374151;
+        }
+
+        .checklist-item.completed .checklist-text {
+            color: #6b7280;
+            text-decoration: line-through;
+        }
+
+        /* Playbook Links */
+        .playbooks-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .playbooks-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+
+        .playbooks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .playbook-card {
+            padding: 1rem;
+            background: #EDE9FE;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .playbook-card:hover {
+            border-color: #7C3AED;
+            transform: translateY(-2px);
+        }
+
+        .playbook-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .playbook-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: #5B21B6;
+            margin-bottom: 0.25rem;
+        }
+
+        .playbook-desc {
+            font-size: 0.8125rem;
+            color: #6b7280;
+        }
+
+        /* Templates Section */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .template-card {
+            padding: 1.25rem;
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-card:hover {
+            border-color: #7C3AED;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+        }
+
+        .template-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .template-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #EDE9FE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .template-name {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .template-desc {
+            font-size: 0.8125rem;
+            color: #6b7280;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #e5e7eb;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-body h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: #111827;
+        }
+
+        .modal-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .modal-body p {
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body ul, .modal-body ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4b5563;
+        }
+
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+        }
+
+        .modal-body th, .modal-body td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .modal-body th {
+            background: #f9fafb;
+            font-weight: 600;
+        }
+
+        .modal-body pre {
+            background: #1F2937;
+            color: #E5E7EB;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.8125rem;
+            margin: 1rem 0;
+        }
+
+        .modal-body code {
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        /* Quick Reference */
+        .quick-reference {
+            background: #1F2937;
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .quick-reference h3 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-reference pre {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+        }
+
+        /* Launch Link */
+        .launch-link-card {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .launch-link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+        }
+
+        .launch-link-content h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .launch-link-content p {
+            opacity: 0.9;
+            font-size: 0.875rem;
+        }
+
+        .launch-link-arrow {
+            font-size: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .timeline::before {
+                top: 0;
+                bottom: 0;
+                left: 20px;
+                width: 4px;
+                height: auto;
+                transform: none;
+            }
+
+            .timeline-item {
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            .phase-tabs {
+                flex-direction: column;
+            }
+
+            .approach-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Enterprise Design Program Framework</h1>
+        <p>From Customer Request to Product: A Structured Approach</p>
+    </div>
+
+    <div class="container">
+        <!-- Executive Summary -->
+        <div class="summary-card">
+            <div class="summary-title">How I'd Approach This</div>
+
+            <div class="summary-subtitle">The Situation</div>
+            <p class="summary-text">
+                Enterprise users are asking for custom requests. The Solutions team is building custom scripts for them. For models that are hosted directly with customers, we can't see how they're using them or how it's going.
+            </p>
+            <p class="summary-text">
+                This isn't scalable. It's also lost value if it only serves one user, when maybe more companies want this.
+            </p>
+
+            <div class="summary-subtitle">The Opportunity</div>
+            <p class="summary-text">
+                Turn this into a design programme and see if it could scale into something for more customers. We already have one case study.
+            </p>
+
+            <div class="summary-subtitle">My Approach</div>
+            <div class="approach-grid">
+                <div class="approach-item">
+                    <strong>1. Set criteria early</strong><br>
+                    We can't waste too much time on each of these cases. There are many of them. We need to test quickly and see which ones stick. So we set criteria early on what success looks like, and have guidelines worked out with Finance so we're not working from first principles every time.
+                </div>
+                <div class="approach-item">
+                    <strong>2. Align before starting</strong><br>
+                    Have a sync meeting to define: what is the design product, what kinds of users it might suit, what features we need to test, what segments we need to test on, and how many users we'd need to see interested for this to be worth our time. Then set the DRIs and team responsible.
+                </div>
+                <div class="approach-item">
+                    <strong>3. Recruit the right users</strong><br>
+                    Don't over-incentivise. We need to test that they actually want the product. Search our database proactively for users who'd be a good fit. Publicise to Sales for prospects they couldn't close but who might need this feature.
+                </div>
+                <div class="approach-item">
+                    <strong>4. Create visibility where we don't have it</strong><br>
+                    For users with models locally, we can't see usage. So we ask if they can share logs for the duration of the programme. Set up a Slack channel for each customer. Track behaviour where we can.
+                </div>
+                <div class="approach-item">
+                    <strong>5. Make it easy to run</strong><br>
+                    There should be a playbook and checklist for every design project, so it's easier to do each time. Document the onboarding process, automate as much as possible. Have a comms playbook. Set up dashboards from day one.
+                </div>
+                <div class="approach-item">
+                    <strong>6. Keep partners engaged without annoying them</strong><br>
+                    These users are hard to recruit, so they need white glove service. We need to show we're bringing value. Personal check-ins on Slack, not over-emailing. Office hours for questions.
+                </div>
+                <div class="approach-item">
+                    <strong>7. Decide with evidence</strong><br>
+                    At the end of the set time, if we see no traction or they don't want the features, check in with customers and get honest feedback on whether it's right to drop this. If we see real traction, bring the data to the table.
+                </div>
+                <div class="approach-item">
+                    <strong>8. Transition properly</strong><br>
+                    If it works, transition to a beta programme and follow a beta-to-launch playbook to polish the product for general access.
+                </div>
+            </div>
+
+            <div class="summary-subtitle">Why This Approach</div>
+            <p class="summary-text">
+                The point is to take the thinking out of setting up the process so the team can focus on the features of the new product. Every design programme has the same bones: recruitment, onboarding, engagement, evaluation. Playbooks and templates mean we're not reinventing the wheel each time.
+            </p>
+            <p class="summary-text">
+                Be intentional and mindful. Don't waste time and effort, but also don't miss where value is hiding.
+            </p>
+
+            <div class="summary-subtitle">Core Principles</div>
+            <div class="principles-list">
+                <div class="principle">
+                    <span class="principle-icon">1</span>
+                    <span><strong>Be intentional, not reactive.</strong> Decide upfront what success looks like.</span>
+                </div>
+                <div class="principle">
+                    <span class="principle-icon">2</span>
+                    <span><strong>Test demand, don't assume it.</strong> One customer asking doesn't mean it's a product.</span>
+                </div>
+                <div class="principle">
+                    <span class="principle-icon">3</span>
+                    <span><strong>Move fast, but know when to stop.</strong> Killing something that isn't working is a success.</span>
+                </div>
+                <div class="principle">
+                    <span class="principle-icon">4</span>
+                    <span><strong>Standardise the repeatable.</strong> Playbooks do the heavy lifting.</span>
+                </div>
+                <div class="principle">
+                    <span class="principle-icon">5</span>
+                    <span><strong>Treat design partners like gold.</strong> White glove service gets honest feedback.</span>
+                </div>
+                <div class="principle">
+                    <span class="principle-icon">6</span>
+                    <span><strong>Automate where possible.</strong> Use AI to scrape feedback, update FAQs, and reduce manual work.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-card">
+            <div class="timeline-title">Programme Timeline</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <div class="timeline-label">Define & Scope</div>
+                    <div class="timeline-duration">1 week</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <div class="timeline-label">Internal Kickoff</div>
+                    <div class="timeline-duration">2-3 days</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <div class="timeline-label">Recruit Partners</div>
+                    <div class="timeline-duration">2 weeks</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">4</div>
+                    <div class="timeline-label">Onboarding</div>
+                    <div class="timeline-duration">1 week</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot checkpoint">W3</div>
+                    <div class="timeline-label">Checkpoint 1</div>
+                    <div class="timeline-duration">Evaluate</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot checkpoint">W6</div>
+                    <div class="timeline-label">Checkpoint 2</div>
+                    <div class="timeline-duration">Evaluate</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot checkpoint">W9</div>
+                    <div class="timeline-label">Checkpoint 3</div>
+                    <div class="timeline-duration">Evaluate</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #10B981;">W12</div>
+                    <div class="timeline-label">Final Decision</div>
+                    <div class="timeline-duration">Kill / Pause / Go</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase Tabs -->
+        <div class="phase-tabs">
+            <button class="phase-tab active" onclick="showPhase('define')">
+                <span class="phase-tab-number">1</span>
+                Define & Scope
+            </button>
+            <button class="phase-tab" onclick="showPhase('kickoff')">
+                <span class="phase-tab-number">2</span>
+                Internal Kickoff
+            </button>
+            <button class="phase-tab" onclick="showPhase('recruit')">
+                <span class="phase-tab-number">3</span>
+                Recruit Partners
+            </button>
+            <button class="phase-tab" onclick="showPhase('onboard')">
+                <span class="phase-tab-number">4</span>
+                Onboarding
+            </button>
+            <button class="phase-tab" onclick="showPhase('engage')">
+                <span class="phase-tab-number">5</span>
+                Engagement
+            </button>
+            <button class="phase-tab" onclick="showPhase('evaluate')">
+                <span class="phase-tab-number">6</span>
+                Evaluate & Decide
+            </button>
+            <button class="phase-tab" onclick="showPhase('transition')">
+                <span class="phase-tab-number">7</span>
+                Transition to Beta
+            </button>
+        </div>
+
+        <!-- Phase 1: Define & Scope -->
+        <div id="define" class="phase-content active">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 1: Define & Scope</div>
+                        <div class="phase-meta">Pre-programme | 1 week</div>
+                    </div>
+                    <div class="phase-progress">
+                        <div class="progress-text"><span id="define-count">0</span>/6 complete</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="define-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Checklist</div>
+                    <div class="checklist" id="define-checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Align on: what is the product, who is it for, what features are we testing</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Define success criteria and killing criteria upfront</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Set evaluation checkpoints (weeks 3, 6, 9, 12)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Consult Finance on "worth our time" thresholds</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Set up tracking dashboards (use standard template)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Assign DRI and team</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Playbooks & Templates</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('scoping')">
+                            <div class="playbook-icon">🎯</div>
+                            <div class="playbook-name">Scoping Questions</div>
+                            <div class="playbook-desc">Questions to answer before starting</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('dashboard')">
+                            <div class="playbook-icon">📊</div>
+                            <div class="playbook-name">Dashboard Setup</div>
+                            <div class="playbook-desc">Standard tracking dashboard template</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2: Internal Kickoff -->
+        <div id="kickoff" class="phase-content">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 2: Internal Kickoff</div>
+                        <div class="phase-meta">Pre-programme | 2-3 days</div>
+                    </div>
+                    <div class="phase-progress">
+                        <div class="progress-text"><span id="kickoff-count">0</span>/3 complete</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="kickoff-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Checklist</div>
+                    <div class="checklist" id="kickoff-checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Send kickoff email to Sales and CS: value prop, target criteria, what we need from them</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Offer brief Q&A if needed</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Post in relevant Slack channels</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Templates</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('kickoff-email')">
+                            <div class="playbook-icon">📧</div>
+                            <div class="playbook-name">Internal Kickoff Email</div>
+                            <div class="playbook-desc">Template for announcing to Sales/CS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3: Recruit Partners -->
+        <div id="recruit" class="phase-content">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 3: Recruit Design Partners</div>
+                        <div class="phase-meta">Weeks -2 to 0 | 2 weeks | Target: 5-8 partners</div>
+                    </div>
+                    <div class="phase-progress">
+                        <div class="progress-text"><span id="recruit-count">0</span>/7 complete</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="recruit-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Checklist</div>
+                    <div class="checklist" id="recruit-checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Search database for matching customers (segment, use case, usage)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Get referrals from Sales/CS</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Reach out (directly or via account manager)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Qualify: right segment, real pain, willing to engage, has technical + business stakeholders</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Confirm incentives: free credits for participation, product free during programme</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Send contract, get signed</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Confirm 5-8 partners recruited</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Playbooks & Templates</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('recruitment')">
+                            <div class="playbook-icon">🎯</div>
+                            <div class="playbook-name">Recruitment Playbook</div>
+                            <div class="playbook-desc">How to find and qualify partners</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('outreach')">
+                            <div class="playbook-icon">📧</div>
+                            <div class="playbook-name">Customer Outreach</div>
+                            <div class="playbook-desc">Email template for recruiting</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('contract')">
+                            <div class="playbook-icon">📝</div>
+                            <div class="playbook-name">Contract Key Terms</div>
+                            <div class="playbook-desc">Legal agreement essentials</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4: Onboarding -->
+        <div id="onboard" class="phase-content">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 4: Onboarding</div>
+                        <div class="phase-meta">Week 1 | 1 week</div>
+                    </div>
+                    <div class="phase-progress">
+                        <div class="progress-text"><span id="onboard-count">0</span>/7 complete</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="onboard-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Checklist (per partner)</div>
+                    <div class="checklist" id="onboard-checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Create Slack channel: #design-[customer]-[product]</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Send welcome message</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Schedule and complete kickoff call</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Provision product access</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Set up tracking (analytics or request log sharing for on-premise)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Schedule first check-in</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Add to dashboard</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Templates</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('welcome')">
+                            <div class="playbook-icon">👋</div>
+                            <div class="playbook-name">Welcome Message</div>
+                            <div class="playbook-desc">First Slack message template</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 5: Engagement -->
+        <div id="engage" class="phase-content">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 5: Engagement & Feedback</div>
+                        <div class="phase-meta">Weeks 1-12 | Ongoing</div>
+                    </div>
+                    <div class="phase-progress">
+                        <div class="progress-text"><span id="engage-count">0</span>/7 complete</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="engage-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Ongoing Activities</div>
+                    <div class="checklist" id="engage-checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Monitor Slack channels daily (respond within 4 hours)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Conduct check-ins per agreed cadence (biweekly recommended)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Host weekly office hours</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Collect feedback continuously (tag: BUG, FEATURE, UX, POSITIVE, BLOCKER)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Update dashboards weekly</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Send weekly progress report</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Keep FAQ updated (automate from Slack with AI)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Playbooks & Templates</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('cadence')">
+                            <div class="playbook-icon">📅</div>
+                            <div class="playbook-name">Engagement Cadence</div>
+                            <div class="playbook-desc">Daily/weekly rhythms</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('comms')">
+                            <div class="playbook-icon">💬</div>
+                            <div class="playbook-name">Comms Guidelines</div>
+                            <div class="playbook-desc">How to communicate with partners</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('feedback')">
+                            <div class="playbook-icon">📝</div>
+                            <div class="playbook-name">Feedback Collection</div>
+                            <div class="playbook-desc">Gathering and tagging feedback</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('faq-automation')">
+                            <div class="playbook-icon">🤖</div>
+                            <div class="playbook-name">Automated FAQ & Bugs</div>
+                            <div class="playbook-desc">AI-powered feedback organisation</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('progress-report')">
+                            <div class="playbook-icon">📊</div>
+                            <div class="playbook-name">Progress Report</div>
+                            <div class="playbook-desc">Weekly update template</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('checkpoint')">
+                            <div class="playbook-icon">✅</div>
+                            <div class="playbook-name">Checkpoint Evaluation</div>
+                            <div class="playbook-desc">Assessment template for each checkpoint</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 6: Evaluate & Decide -->
+        <div id="evaluate" class="phase-content">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 6: Evaluate & Decide</div>
+                        <div class="phase-meta">Week 12 | Final Decision</div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Three Possible Outcomes</div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="background: #FEE2E2; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #EF4444;">
+                            <h4 style="color: #991B1B; margin-bottom: 0.5rem;">Kill</h4>
+                            <p style="font-size: 0.875rem; color: #7F1D1D; margin-bottom: 0.75rem;"><strong>If:</strong> Low engagement, partners wouldn't pay, features not resonating</p>
+                            <ul style="font-size: 0.8125rem; color: #991B1B; margin-left: 1rem;">
+                                <li>Call each partner for honest feedback</li>
+                                <li>Document learnings</li>
+                                <li>Send "not proceeding" message</li>
+                                <li>Archive materials</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #FEF3C7; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #F59E0B;">
+                            <h4 style="color: #92400E; margin-bottom: 0.5rem;">Pause & Reassess</h4>
+                            <p style="font-size: 0.875rem; color: #78350F; margin-bottom: 0.75rem;"><strong>If:</strong> Mixed signals, unclear if product or execution issue</p>
+                            <ul style="font-size: 0.8125rem; color: #92400E; margin-left: 1rem;">
+                                <li>Identify what's not working</li>
+                                <li>Propose adjustments</li>
+                                <li>Set new checkpoint (max 4 more weeks)</li>
+                                <li>Communicate changes to partners</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #D1FAE5; padding: 1.25rem; border-radius: 8px; border-left: 4px solid #10B981;">
+                            <h4 style="color: #065F46; margin-bottom: 0.5rem;">Proceed</h4>
+                            <p style="font-size: 0.875rem; color: #064E3B; margin-bottom: 0.75rem;"><strong>If:</strong> Strong engagement, partners would pay, clear use cases</p>
+                            <ul style="font-size: 0.8125rem; color: #065F46; margin-left: 1rem;">
+                                <li>Compile results</li>
+                                <li>Meet with each partner's technical team</li>
+                                <li>Bring in Sales + their business team</li>
+                                <li>Move to Phase 7: Transition to Beta</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Templates</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('not-proceeding')">
+                            <div class="playbook-icon">📭</div>
+                            <div class="playbook-name">"Not Proceeding" Message</div>
+                            <div class="playbook-desc">Template for when killing</div>
+                        </div>
+                        <div class="playbook-card" onclick="openPlaybook('moving-beta')">
+                            <div class="playbook-icon">🚀</div>
+                            <div class="playbook-name">"Moving to Beta" Message</div>
+                            <div class="playbook-desc">Template for when proceeding</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 7: Transition to Beta -->
+        <div id="transition" class="phase-content">
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">Phase 7: Transition to Beta</div>
+                        <div class="phase-meta">Week 13+ | Ongoing</div>
+                    </div>
+                    <div class="phase-progress">
+                        <div class="progress-text"><span id="transition-count">0</span>/8 complete</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="transition-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-section">
+                    <div class="checklist-title">Checklist</div>
+                    <div class="checklist" id="transition-checklist">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Communicate to all design partners</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Introduce Sales to each partner</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Convert partners to beta customers</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Address critical feedback from programme</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Prepare support and documentation</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Recruit additional beta customers</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Build case studies from willing partners</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Prepare GTM for launch</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playbooks-section">
+                    <div class="playbooks-title">Playbooks</div>
+                    <div class="playbooks-grid">
+                        <div class="playbook-card" onclick="openPlaybook('case-studies')">
+                            <div class="playbook-icon">📖</div>
+                            <div class="playbook-name">Case Studies</div>
+                            <div class="playbook-desc">Creating customer stories</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Link to Launch Checklist -->
+                <a href="./launch-checklist.html" class="launch-link-card">
+                    <div class="launch-link-content">
+                        <h3>Ready for Launch?</h3>
+                        <p>Once your beta is ready, use the Launch Checklist to coordinate your GA release</p>
+                    </div>
+                    <div class="launch-link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="quick-reference">
+            <h3>Quick Reference</h3>
+            <pre>
+SETUP (2-3 weeks)
+├── Define & Scope
+├── Internal Kickoff
+└── Recruit Partners (target: 5-8)
+
+PROGRAMME (12 weeks)
+├── Week 1: Onboarding
+├── Week 3: Checkpoint
+├── Week 6: Checkpoint
+├── Week 9: Checkpoint
+└── Week 12: Final Decision
+
+DECISION
+├── Kill → Wind down, capture learnings
+├── Pause → Adjust, set new checkpoint
+└── Proceed → Transition to Beta
+            </pre>
+        </div>
+
+        <p style="text-align: center; color: #9ca3af; font-size: 0.875rem; margin-top: 2rem; font-style: italic;">
+            This framework exists to make running design programmes easy and repeatable.<br>
+            If any part feels heavy or bureaucratic, cut it. The goal is to focus on the product and customers, not the process.
+        </p>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Playbook</div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Phase switching
+        function showPhase(phaseId) {
+            document.querySelectorAll('.phase-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+
+            document.getElementById(phaseId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Checklist toggle
+        function toggleCheck(item) {
+            item.classList.toggle('completed');
+            const checkbox = item.querySelector('.checklist-checkbox');
+            if (item.classList.contains('completed')) {
+                checkbox.innerHTML = '✓';
+            } else {
+                checkbox.innerHTML = '';
+            }
+            updateProgress();
+        }
+
+        // Update progress bars
+        function updateProgress() {
+            const phases = ['define', 'kickoff', 'recruit', 'onboard', 'engage', 'transition'];
+            phases.forEach(phase => {
+                const checklist = document.getElementById(phase + '-checklist');
+                if (checklist) {
+                    const total = checklist.querySelectorAll('.checklist-item').length;
+                    const completed = checklist.querySelectorAll('.checklist-item.completed').length;
+                    const countEl = document.getElementById(phase + '-count');
+                    const progressEl = document.getElementById(phase + '-progress');
+                    if (countEl) countEl.textContent = completed;
+                    if (progressEl) progressEl.style.width = (completed / total * 100) + '%';
+                }
+            });
+        }
+
+        // Playbook content
+        const playbooks = {
+            'scoping': {
+                title: 'Scoping Questions',
+                content: `
+                    <h3>The Problem</h3>
+                    <ul>
+                        <li>What customer request triggered this?</li>
+                        <li>How many others have asked for something similar?</li>
+                        <li>What's the pain level? (nice-to-have vs critical)</li>
+                    </ul>
+
+                    <h3>The Product</h3>
+                    <ul>
+                        <li>What's the simplest version we could test?</li>
+                        <li>What features must we validate?</li>
+                    </ul>
+
+                    <h3>The Customers</h3>
+                    <ul>
+                        <li>Who is the ideal design partner?</li>
+                        <li>How many do we need? (recommend: 5-8)</li>
+                    </ul>
+
+                    <h3>Success Criteria</h3>
+                    <ul>
+                        <li>Minimum partners actively engaged: ___</li>
+                        <li>Minimum who would pay: ___</li>
+                        <li>What would make us kill this early?</li>
+                    </ul>
+                `
+            },
+            'dashboard': {
+                title: 'Dashboard Setup',
+                content: `
+                    <p>Set up a single dashboard with:</p>
+
+                    <table>
+                        <thead>
+                            <tr><th>Section</th><th>What to Track</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Overview</td><td>Total partners, active partners, days remaining, next checkpoint</td></tr>
+                            <tr><td>Engagement</td><td>Last active date, Slack messages, calls completed, health status</td></tr>
+                            <tr><td>Feature usage</td><td>Which features used, frequency, sentiment</td></tr>
+                            <tr><td>Feedback</td><td>Total items, by type (bug/feature/UX/positive/blocker)</td></tr>
+                            <tr><td>Success metrics</td><td>Targets vs actuals for each success criterion</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p>Use Notion / Airtable / Sheets - pick one as standard. Update weekly.</p>
+                `
+            },
+            'kickoff-email': {
+                title: 'Internal Kickoff Email',
+                content: `
+                    <pre>Subject: [Design Programme] [Product Name] - Need Your Help
+
+We're testing [product] with enterprise customers.
+
+**What we're testing:** [2 sentences]
+
+**Who we're looking for:** [criteria]
+
+**What we need from you:**
+- Flag customers who've asked for this
+- Flag prospects who needed this feature
+- Intro us to good fits
+
+**Timeline:** Recruiting through [date], programme runs 12 weeks
+
+Questions? Reach out to [DRI].</pre>
+                `
+            },
+            'recruitment': {
+                title: 'Recruitment Playbook',
+                content: `
+                    <h3>Target List</h3>
+                    <p>15-20 prospects to get 5-8 partners</p>
+
+                    <h3>Outreach Sequence</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Initial outreach</li>
+                        <li><strong>Day 3:</strong> Follow-up if no response</li>
+                        <li><strong>Day 7:</strong> Final follow-up or move on</li>
+                    </ul>
+
+                    <h3>Qualification Call (20 min)</h3>
+                    <p>Confirm they:</p>
+                    <ul>
+                        <li>Have the problem</li>
+                        <li>Have time to commit</li>
+                        <li>Can give feedback</li>
+                        <li>Understand this is a test</li>
+                    </ul>
+                `
+            },
+            'outreach': {
+                title: 'Customer Outreach Template',
+                content: `
+                    <pre>Subject: Early access to [Product] - design partner invitation
+
+We're building [one sentence] and looking for design partners to shape it.
+
+Based on [reason], I thought [Company] might be a good fit.
+
+**What you'd get:** Early access, direct roadmap input, free credits
+**What we'd ask:** 12 weeks, [frequency] check-ins, honest feedback
+
+We're only taking 5-8 partners. Interested?
+
+[Name]</pre>
+                `
+            },
+            'contract': {
+                title: 'Contract Key Terms',
+                content: `
+                    <ul>
+                        <li>Programme is free</li>
+                        <li>If product launches, participant moves to standard pricing</li>
+                        <li>Product may be discontinued if programme isn't successful</li>
+                        <li>Either party can exit with 7 days notice</li>
+                    </ul>
+                `
+            },
+            'welcome': {
+                title: 'Welcome Message (Slack)',
+                content: `
+                    <pre>Welcome to the [Product] design programme! 🎉
+
+**Your contacts:** [Names and roles]
+
+**Key dates:**
+- Kickoff call: [Date]
+- Programme end: [Date]
+- Checkpoints: Weeks 3, 6, 9, 12
+
+**Resources:** [Links]
+
+Questions anytime - we aim to respond within 4 hours.</pre>
+                `
+            },
+            'cadence': {
+                title: 'Engagement Cadence',
+                content: `
+                    <table>
+                        <thead>
+                            <tr><th>Frequency</th><th>Activity</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Daily</td><td>Monitor Slack, respond within 4 hours</td></tr>
+                            <tr><td>Weekly</td><td>Office hours, dashboard update, progress report</td></tr>
+                            <tr><td>Biweekly</td><td>Check-in calls with each partner</td></tr>
+                            <tr><td>Checkpoints</td><td>Full evaluation against success criteria</td></tr>
+                        </tbody>
+                    </table>
+                `
+            },
+            'comms': {
+                title: 'Comms Guidelines',
+                content: `
+                    <h3>The Principle</h3>
+                    <p>White glove service. These partners are hard to recruit and easy to lose.</p>
+
+                    <h3>Guidelines</h3>
+                    <ul>
+                        <li>Respond to Slack within 4 hours</li>
+                        <li>Be personal, not generic</li>
+                        <li>Thank them for feedback and show how it's being used</li>
+                        <li>If they go quiet: nudge at day 3, offer call at day 7, direct ask at day 14</li>
+                    </ul>
+                `
+            },
+            'feedback': {
+                title: 'Feedback Collection',
+                content: `
+                    <h3>Sources</h3>
+                    <p>Slack, check-in calls, feedback forms, usage data</p>
+
+                    <h3>Tagging</h3>
+                    <p>[BUG] [FEATURE] [UX] [POSITIVE] [BLOCKER]</p>
+
+                    <h3>Synthesis</h3>
+                    <p>Weekly review and tag. Biweekly summary to Product/Engineering.</p>
+                `
+            },
+            'faq-automation': {
+                title: 'Automated FAQ & Bug Tracking',
+                content: `
+                    <h3>Goal</h3>
+                    <p>Reduce manual work by using AI to scrape and organise feedback.</p>
+
+                    <h3>Setup</h3>
+                    <ul>
+                        <li>Connect Slack channel to automation tool</li>
+                        <li>AI scans messages for questions, bugs, and feature requests</li>
+                        <li>Auto-categorise and add to:
+                            <ul>
+                                <li>FAQ document (common questions + answers)</li>
+                                <li>Bug tracker (with frequency count)</li>
+                                <li>Feature request log (with upvote count)</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3>Review</h3>
+                    <p>DRI reviews automated entries weekly, approves/edits, publishes FAQ updates.</p>
+
+                    <h3>Benefit</h3>
+                    <p>Partners see their feedback turning into documentation. Reduces repeat questions. Creates living knowledge base.</p>
+                `
+            },
+            'progress-report': {
+                title: 'Progress Report (Weekly)',
+                content: `
+                    <pre>[Product] Design Programme - Week [X]
+
+**Status:** [On track / At risk / Off track]
+
+**Metrics:**
+- Active partners: X / Y
+- Engagement: [High/Med/Low]
+- Would pay (validated): X / Y
+
+**What's working:** [Bullets]
+
+**Concerns:** [Bullets]
+
+**Top feedback themes:** [List]
+
+**Next checkpoint:** Week [X]</pre>
+                `
+            },
+            'checkpoint': {
+                title: 'Checkpoint Evaluation',
+                content: `
+                    <pre>[Product] - Checkpoint Week [X]
+
+**Success Criteria:**
+| Criteria | Target | Actual | Met? |
+|----------|--------|--------|------|
+| [Criteria] | [X] | [Y] | ✓/✗ |
+
+**Partner Status:**
+| Partner | Engagement | Would Pay? |
+|---------|-----------|------------|
+| [Name] | High/Med/Low | Yes/Maybe/No |
+
+**Recommendation:** [ ] Continue  [ ] Pause  [ ] Kill
+
+**Rationale:** [2-3 sentences]</pre>
+                `
+            },
+            'not-proceeding': {
+                title: '"Not Proceeding" Message',
+                content: `
+                    <pre>Subject: [Product] Design Programme - Update
+
+Thank you for being part of the [Product] design programme.
+
+After evaluation, we've decided not to move forward with [Product] at this time. Your feedback was invaluable and will inform future development.
+
+Access will end on [Date]. Your credits remain yours to use.
+
+Thank you again for your partnership.
+
+[Name]</pre>
+                `
+            },
+            'moving-beta': {
+                title: '"Moving to Beta" Message',
+                content: `
+                    <pre>Subject: [Product] is moving forward!
+
+Great news: [Product] is moving to beta. Your feedback directly shaped this.
+
+**What this means:**
+- Continued access during beta
+- [Benefit for design partners]
+- Transition to standard pricing when we launch
+
+[Name] from Sales will reach out to discuss next steps.
+
+Thank you for being a design partner.
+
+[Name]</pre>
+                `
+            },
+            'case-studies': {
+                title: 'Case Studies Playbook',
+                content: `
+                    <h3>Steps</h3>
+                    <ol>
+                        <li>Identify willing partners with strong results</li>
+                        <li>Interview (20 min): problem, solution, results</li>
+                        <li>Draft (1 page max)</li>
+                        <li>Get partner approval</li>
+                        <li>Publish and share with Sales</li>
+                    </ol>
+                `
+            }
+        };
+
+        function openPlaybook(id) {
+            const playbook = playbooks[id];
+            if (playbook) {
+                document.getElementById('modalTitle').textContent = playbook.title;
+                document.getElementById('modalBody').innerHTML = playbook.content;
+                document.getElementById('modalOverlay').classList.add('active');
+            }
+        }
+
+        function closeModal(event) {
+            if (!event || event.target === document.getElementById('modalOverlay')) {
+                document.getElementById('modalOverlay').classList.remove('active');
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
