@@ -3016,6 +3016,51 @@
                 align-items: flex-start;
             }
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           EMBEDDED DASHBOARD STYLES
+        ═══════════════════════════════════════════════════════════════ */
+        .dashboard-embed { background: #f9fafb; padding: 0; }
+        .dashboard-embed .container { max-width: 1400px; margin: 0 auto; padding: 1rem; }
+        .dashboard-embed .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: white; padding: 0.75rem; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow-x: auto; flex-wrap: wrap; }
+        .dashboard-embed .dtab { padding: 0.6rem 1.25rem; background: transparent; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 500; transition: all 0.15s; white-space: nowrap; color: var(--color-secondary); }
+        .dashboard-embed .dtab:hover { background: #f3f4f6; color: var(--color-primary); }
+        .dashboard-embed .dtab.active { background: var(--color-accent); color: white; }
+        .dashboard-embed .dtab-content { display: none; animation: fadeIn 0.2s; }
+        .dashboard-embed .dtab-content.active { display: block; }
+        .dashboard-embed .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .dashboard-embed .metric-card { background: white; padding: 1.25rem; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .dashboard-embed .metric-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px; }
+        .dashboard-embed .metric-value { font-size: 1.75rem; font-weight: 700; color: #111827; margin-bottom: 0.25rem; }
+        .dashboard-embed .metric-change { font-size: 0.8rem; font-weight: 500; }
+        .dashboard-embed .metric-change.positive { color: #059669; }
+        .dashboard-embed .metric-change.negative { color: #dc2626; }
+        .dashboard-embed .metric-meta { font-size: 0.7rem; color: #9ca3af; margin-top: 0.4rem; }
+        .dashboard-embed .chart-container { background: white; border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .dashboard-embed .chart-title { font-size: 1rem; font-weight: 600; color: #111827; }
+        .dashboard-embed .chart-meta { font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }
+        .dashboard-embed .feedback-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+        .dashboard-embed .feedback-card { background: white; padding: 1.25rem; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); border-left: 4px solid var(--color-accent); transition: transform 0.15s; }
+        .dashboard-embed .feedback-card:hover { transform: translateX(3px); }
+        .dashboard-embed .feedback-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
+        .dashboard-embed .feedback-title { font-weight: 600; color: #111827; font-size: 0.9rem; }
+        .dashboard-embed .feedback-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .dashboard-embed .badge { padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.7rem; font-weight: 500; white-space: nowrap; }
+        .dashboard-embed .badge-source { background: #dbeafe; color: #1e40af; }
+        .dashboard-embed .badge-priority { background: #fee2e2; color: #991b1b; }
+        .dashboard-embed .badge-enterprise { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
+        .dashboard-embed .badge-sentiment-negative { background: #fee2e2; color: #991b1b; }
+        .dashboard-embed .badge-sentiment-positive { background: #d1fae5; color: #065f46; }
+        .dashboard-embed .badge-health-high { background: #fee2e2; color: #991b1b; }
+        .dashboard-embed .badge-health-medium { background: #fef3c7; color: #92400e; }
+        .dashboard-embed .badge-health-good { background: #d1fae5; color: #065f46; }
+        .dashboard-embed .priority-boosted { background: #fef3c7; color: #92400e; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: 500; border: 1px solid #fbbf24; }
+        .dashboard-embed .feedback-content { color: #4b5563; font-size: 0.85rem; margin-bottom: 0.6rem; line-height: 1.5; }
+        .dashboard-embed .feedback-meta { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.75rem; color: #6b7280; }
+        .dashboard-embed .user-context { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid #f3f4f6; font-size: 0.8rem; color: #6b7280; flex-wrap: wrap; }
+        .dashboard-embed .info-box { background: #eff6ff; border: 1px solid #93c5fd; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .dashboard-embed .info-box strong { color: #1e40af; }
+        .dashboard-embed .info-box span { font-size: 0.85rem; color: #1e40af; }
     </style>
 </head>
 <body>
@@ -4170,663 +4215,276 @@
         <div class="feedback-dashboard" id="feedbackDashboard">
             <div class="feedback-header">
                 <h1 class="feedback-header-title">Product Feedback Dashboard</h1>
-                <p class="feedback-header-subtitle">Aggregated feedback with AI-powered prioritization, strategic frameworks, and competitor intelligence</p>
+                <p class="feedback-header-subtitle">Raw feedback → Mistral AI categorisation → Customer-weighted prioritisation → Action queue</p>
+            </div>
+
+            <!-- MVP Implementation Note -->
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.1rem;">💡</span>
+                <div style="flex: 1;">
+                    <strong style="color: #92400e; font-size: 0.8rem;">MVP Implementation:</strong>
+                    <span style="color: #78350f; font-size: 0.8rem;"> This view can be built with Airtable + Zapier + Mistral API — no engineering dependency required.</span>
+                </div>
             </div>
 
             <!-- Sub-tabs for different views -->
             <div class="feedback-tabs">
                 <button class="feedback-tab active" onclick="showFeedbackSubTab('overview-tab')">
                     <span class="feedback-tab-icon">📊</span>
-                    <span>Overview</span>
+                    <span>Dashboard</span>
                     <span class="feedback-tab-badge">247</span>
-                </button>
-                <button class="feedback-tab" onclick="showFeedbackSubTab('rice-tab')">
-                    <span class="feedback-tab-icon">🎯</span>
-                    <span>RICE Scoring</span>
-                </button>
-                <button class="feedback-tab" onclick="showFeedbackSubTab('kano-tab')">
-                    <span class="feedback-tab-icon">💎</span>
-                    <span>Kano Model</span>
-                </button>
-                <button class="feedback-tab" onclick="showFeedbackSubTab('jtbd-tab')">
-                    <span class="feedback-tab-icon">🎭</span>
-                    <span>Jobs-to-be-Done</span>
-                </button>
-                <button class="feedback-tab" onclick="showFeedbackSubTab('competitor-tab')">
-                    <span class="feedback-tab-icon">🏆</span>
-                    <span>Competitors</span>
-                    <span class="feedback-tab-badge">5</span>
                 </button>
                 <button class="feedback-tab" onclick="showFeedbackSubTab('alldata-tab')">
                     <span class="feedback-tab-icon">📋</span>
-                    <span>All Data</span>
+                    <span>All Feedback</span>
                     <span class="feedback-tab-badge">247</span>
                 </button>
             </div>
 
-            <!-- Overview Tab Content -->
+            <!-- Dashboard Tab Content -->
             <div id="overview-tab" class="feedback-tab-content active">
-                <iframe src="./dashboard-mockup-v4-real-data.html" style="width: 100%; height: calc(100vh - 200px); border: none; border-radius: var(--radius-md);"></iframe>
-            </div>
-
-            <!-- RICE Prioritization Tab -->
-            <div id="rice-tab" class="feedback-tab-content">
-                <div class="rice-container">
-                    <div class="rice-header">
-                        <div>
-                            <div class="rice-title">RICE Prioritization Framework</div>
-                            <div class="rice-subtitle">Quantitative scoring to prioritize product initiatives</div>
-                        </div>
-                    </div>
-
-                    <div class="rice-formula-box">
-                        <div class="rice-formula-text">
-                            <strong>RICE Score</strong> = (<strong>Reach</strong> × <strong>Impact</strong> × <strong>Confidence</strong>) ÷ <strong>Effort</strong>
-                        </div>
-                    </div>
-
-                    <table class="rice-table">
-                        <thead>
-                            <tr>
-                                <th>Initiative</th>
-                                <th>Reach</th>
-                                <th>Impact</th>
-                                <th>Confidence</th>
-                                <th>Effort</th>
-                                <th>Score</th>
-                                <th>Priority</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr onclick="showRiceDetail('rate-limiting')">
-                                <td>
-                                    <div class="rice-initiative">Fix Rate Limiting Issues</div>
-                                    <div class="rice-initiative-desc">GitHub #1885, #7029 - API rate limit errors blocking users</div>
-                                </td>
-                                <td class="rice-cell">450<small>Users/quarter</small></td>
-                                <td class="rice-cell">3.0<small>Massive</small></td>
-                                <td class="rice-cell">90%<small>High</small></td>
-                                <td class="rice-cell">0.5<small>2 weeks</small></td>
-                                <td><span class="rice-score high">2,430</span></td>
-                                <td><span class="rice-priority p0">P0</span></td>
-                            </tr>
-                            <tr onclick="showRiceDetail('docs')">
-                                <td>
-                                    <div class="rice-initiative">Documentation Overhaul</div>
-                                    <div class="rice-initiative-desc">Match OpenAI docs quality - 3.2/5 → 4.5/5 target</div>
-                                </td>
-                                <td class="rice-cell">2,400<small>All new users</small></td>
-                                <td class="rice-cell">1.5<small>High</small></td>
-                                <td class="rice-cell">80%<small>Proven</small></td>
-                                <td class="rice-cell">1.5<small>6 weeks</small></td>
-                                <td><span class="rice-score high">1,920</span></td>
-                                <td><span class="rice-priority p0">P0</span></td>
-                            </tr>
-                            <tr onclick="showRiceDetail('magistral')">
-                                <td>
-                                    <div class="rice-initiative">Magistral Reasoning Improvements</div>
-                                    <div class="rice-initiative-desc">Fix infinite loops, expand 128K context window</div>
-                                </td>
-                                <td class="rice-cell">1,200<small>Reasoning users</small></td>
-                                <td class="rice-cell">2.0<small>High</small></td>
-                                <td class="rice-cell">70%<small>Complex</small></td>
-                                <td class="rice-cell">2.0<small>8 weeks</small></td>
-                                <td><span class="rice-score high">840</span></td>
-                                <td><span class="rice-priority p0">P0</span></td>
-                            </tr>
-                            <tr onclick="showRiceDetail('cpu')">
-                                <td>
-                                    <div class="rice-initiative">CPU Inference Backend</div>
-                                    <div class="rice-initiative-desc">Enable edge deployment without GPU</div>
-                                </td>
-                                <td class="rice-cell">600<small>Edge users</small></td>
-                                <td class="rice-cell">2.0<small>High</small></td>
-                                <td class="rice-cell">75%<small>Scoped</small></td>
-                                <td class="rice-cell">3.0<small>12 weeks</small></td>
-                                <td><span class="rice-score medium">300</span></td>
-                                <td><span class="rice-priority p1">P1</span></td>
-                            </tr>
-                            <tr onclick="showRiceDetail('multimodal')">
-                                <td>
-                                    <div class="rice-initiative">Multi-modal (Vision + Text)</div>
-                                    <div class="rice-initiative-desc">Compete with GPT-4V, Claude 3 Vision</div>
-                                </td>
-                                <td class="rice-cell">800<small>Champions</small></td>
-                                <td class="rice-cell">2.5<small>Very High</small></td>
-                                <td class="rice-cell">60%<small>Uncertain</small></td>
-                                <td class="rice-cell">6.0<small>24 weeks</small></td>
-                                <td><span class="rice-score medium">200</span></td>
-                                <td><span class="rice-priority p1">P1</span></td>
-                            </tr>
-                            <tr onclick="showRiceDetail('sso')">
-                                <td>
-                                    <div class="rice-initiative">Enterprise SSO (SAML/OIDC)</div>
-                                    <div class="rice-initiative-desc">Critical for enterprise adoption</div>
-                                </td>
-                                <td class="rice-cell">350<small>Enterprise</small></td>
-                                <td class="rice-cell">2.0<small>High</small></td>
-                                <td class="rice-cell">85%<small>Clear spec</small></td>
-                                <td class="rice-cell">2.0<small>8 weeks</small></td>
-                                <td><span class="rice-score medium">298</span></td>
-                                <td><span class="rice-priority p1">P1</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="rice-insights">
-                        <div class="rice-insights-title">RICE Analysis Insights</div>
-                        <ul class="rice-insights-list">
-                            <li><strong>Top 3 priorities</strong> (RICE > 800) address critical bugs and documentation gaps</li>
-                            <li><strong>Rate limiting fix</strong> has highest ROI - massive impact with only 2 weeks effort</li>
-                            <li><strong>Documentation</strong> reaches all 2,400 new users/quarter - linear satisfaction boost</li>
-                            <li><strong>Multi-modal</strong> has potential but lower confidence - validate demand first</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kano Model Tab -->
-            <div id="kano-tab" class="feedback-tab-content">
-                <div class="kano-container">
-                    <div class="kano-header">
-                        <div class="kano-title">Kano Model Analysis</div>
-                        <div class="kano-subtitle">Categorize features by customer satisfaction impact</div>
-                    </div>
-
-                    <div class="kano-legend">
-                        <div class="kano-legend-item">
-                            <div class="kano-legend-dot delighter"></div>
-                            <span>Delighters (exceed expectations)</span>
-                        </div>
-                        <div class="kano-legend-item">
-                            <div class="kano-legend-dot performance"></div>
-                            <span>Performance (more is better)</span>
-                        </div>
-                        <div class="kano-legend-item">
-                            <div class="kano-legend-dot basic"></div>
-                            <span>Basic (must-haves)</span>
-                        </div>
-                        <div class="kano-legend-item">
-                            <div class="kano-legend-dot indifferent"></div>
-                            <span>Indifferent (don't care)</span>
-                        </div>
-                    </div>
-
-                    <div class="kano-grid">
-                        <!-- Basic Expectations -->
-                        <div class="kano-quadrant basic">
-                            <div class="kano-quadrant-header">
-                                <span class="kano-quadrant-icon">🔴</span>
-                                <span class="kano-quadrant-title">Basic Expectations</span>
-                            </div>
-                            <div class="kano-quadrant-hint">Absence causes dissatisfaction - fix these first</div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">API Reliability (Rate Limits)</div>
-                                <div class="kano-item-meta">450 users blocked • Expected to "just work"</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Model Output Quality</div>
-                                <div class="kano-item-meta">Infinite loops unacceptable • Table stakes</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Basic Documentation</div>
-                                <div class="kano-item-meta">Can't use product without it</div>
-                            </div>
+                <div class="dashboard-embed">
+                    <div class="container">
+                        <!-- Dashboard Sub-tabs -->
+                        <div class="tabs">
+                            <button class="dtab active" onclick="showDashboardTab('d-overview')">📊 Overview</button>
+                            <button class="dtab" onclick="showDashboardTab('d-feedback')">💬 Feedback Queue</button>
+                            <button class="dtab" onclick="showDashboardTab('d-pipeline')">🤖 AI Pipeline</button>
                         </div>
 
-                        <!-- Performance Features -->
-                        <div class="kano-quadrant performance">
-                            <div class="kano-quadrant-header">
-                                <span class="kano-quadrant-icon">🟡</span>
-                                <span class="kano-quadrant-title">Performance Features</span>
-                            </div>
-                            <div class="kano-quadrant-hint">Linear satisfaction increase - invest here</div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">API Response Speed</div>
-                                <div class="kano-item-meta">1.2s → 0.8s (match OpenAI)</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Context Window Size</div>
-                                <div class="kano-item-meta">128K → 200K+ for reasoning</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Documentation Quality</div>
-                                <div class="kano-item-meta">3.2/5 → 4.5/5 = proportional satisfaction</div>
-                            </div>
-                        </div>
-
-                        <!-- Indifferent -->
-                        <div class="kano-quadrant indifferent">
-                            <div class="kano-quadrant-header">
-                                <span class="kano-quadrant-icon">⚪</span>
-                                <span class="kano-quadrant-title">Indifferent</span>
-                            </div>
-                            <div class="kano-quadrant-hint">Users don't care - deprioritize</div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">UI Polish (Color Schemes)</div>
-                                <div class="kano-item-meta">Nice but doesn't affect usage</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Minor SDK Conveniences</div>
-                                <div class="kano-item-meta">Few users mention</div>
-                            </div>
-                        </div>
-
-                        <!-- Delighters -->
-                        <div class="kano-quadrant delighter">
-                            <div class="kano-quadrant-header">
-                                <span class="kano-quadrant-icon">🟢</span>
-                                <span class="kano-quadrant-title">Delighters</span>
-                            </div>
-                            <div class="kano-quadrant-hint">Unexpected features that wow users</div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Open Weights Models</div>
-                                <div class="kano-item-meta">5.0/5 rating • Huge differentiator</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">European Data Sovereignty</div>
-                                <div class="kano-item-meta">Strategic advantage for EU customers</div>
-                            </div>
-                            <div class="kano-item">
-                                <div class="kano-item-title">Multi-modal Capabilities</div>
-                                <div class="kano-item-meta">Not expected, would surprise champions</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="kano-strategy">
-                        <div class="kano-strategy-title">Kano Strategy Recommendations</div>
-                        <ul class="kano-strategy-list">
-                            <li><strong>Fix Basics First:</strong> Rate limiting and output quality are hygiene factors - absence = churn</li>
-                            <li><strong>Invest in Performance:</strong> Docs quality and API speed have linear ROI</li>
-                            <li><strong>Double Down on Delighters:</strong> Open weights is your moat - promote it heavily</li>
-                            <li><strong>Kano Migration:</strong> Yesterday's delighters → today's basics. Stay ahead!</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Jobs-to-be-Done Tab -->
-            <div id="jtbd-tab" class="feedback-tab-content">
-                <div class="jtbd-container">
-                    <div class="jtbd-header">
-                        <div class="jtbd-title">Jobs-to-be-Done Analysis</div>
-                        <div class="jtbd-subtitle">Understanding what customers are "hiring" Mistral to do</div>
-                    </div>
-
-                    <div class="jtbd-formula">
-                        <strong>JTBD Framework:</strong> When [situation], I want to [motivation], so I can [outcome]. Focus on the job, not the product feature.
-                    </div>
-
-                    <!-- Job #1 -->
-                    <div class="jtbd-card">
-                        <div class="jtbd-job-title">Job #1: "Help me reduce LLM costs without sacrificing quality"</div>
-                        <div class="jtbd-context">
-                            <strong>Situation:</strong> When my OpenAI/Anthropic bills are growing 3x faster than revenue<br>
-                            <strong>Motivation:</strong> I want to find a cheaper alternative that maintains 90%+ quality<br>
-                            <strong>Outcome:</strong> So I can keep my margin healthy while scaling AI features
-                        </div>
-                        <div class="jtbd-metrics">
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Frequency</div>
-                                <div class="jtbd-metric-value">156</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Satisfaction</div>
-                                <div class="jtbd-metric-value good">8.2/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Importance</div>
-                                <div class="jtbd-metric-value">9.1/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Opportunity</div>
-                                <div class="jtbd-metric-value good">9.9</div>
-                            </div>
-                        </div>
-                        <div class="jtbd-quotes">
-                            <div class="jtbd-quotes-title">Customer Quotes</div>
-                            <div class="jtbd-quote">Cut our API costs by 70% switching from GPT-4 to Mixtral. Performance is comparable! (Reddit, 450 upvotes)</div>
-                            <div class="jtbd-quote">Mistral Large for summarization is 40% cheaper than Claude with similar quality (Discord)</div>
-                        </div>
-                        <div class="jtbd-assessment excellent">
-                            <div class="jtbd-assessment-title">How Well Does Mistral Do This Job?</div>
-                            <div class="jtbd-assessment-text">Excellent - this is Mistral's core value prop. Keep price advantage, maintain quality parity.</div>
-                        </div>
-                    </div>
-
-                    <!-- Job #2 -->
-                    <div class="jtbd-card">
-                        <div class="jtbd-job-title">Job #2: "Help me deploy AI on-premise for compliance/privacy"</div>
-                        <div class="jtbd-context">
-                            <strong>Situation:</strong> When I work in regulated industries with strict data policies<br>
-                            <strong>Motivation:</strong> I want to run LLMs entirely within my infrastructure<br>
-                            <strong>Outcome:</strong> So I can use AI without sending data to third-party APIs
-                        </div>
-                        <div class="jtbd-metrics">
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Frequency</div>
-                                <div class="jtbd-metric-value">89</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Satisfaction</div>
-                                <div class="jtbd-metric-value warning">6.8/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Importance</div>
-                                <div class="jtbd-metric-value">9.5/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Opportunity</div>
-                                <div class="jtbd-metric-value warning">11.7</div>
-                            </div>
-                        </div>
-                        <div class="jtbd-quotes">
-                            <div class="jtbd-quotes-title">Customer Quotes</div>
-                            <div class="jtbd-quote">Fortune 500 interested in on-premise. Would pay 5x for compliance. Open weights are huge. (Granola)</div>
-                        </div>
-                        <div class="jtbd-assessment moderate">
-                            <div class="jtbd-assessment-title">How Well Does Mistral Do This Job?</div>
-                            <div class="jtbd-assessment-text">Moderate - open weights enable this, but rate limiting bugs and CPU inference gaps hurt.</div>
-                        </div>
-                    </div>
-
-                    <!-- Job #3 -->
-                    <div class="jtbd-card">
-                        <div class="jtbd-job-title">Job #3: "Help me get started quickly without reading 100 pages of docs"</div>
-                        <div class="jtbd-context">
-                            <strong>Situation:</strong> When I'm a new developer trying to integrate Mistral<br>
-                            <strong>Motivation:</strong> I want to make my first successful API call in &lt;15 minutes<br>
-                            <strong>Outcome:</strong> So I can evaluate if Mistral fits my use case
-                        </div>
-                        <div class="jtbd-metrics">
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Frequency</div>
-                                <div class="jtbd-metric-value">234</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Satisfaction</div>
-                                <div class="jtbd-metric-value bad">5.2/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Importance</div>
-                                <div class="jtbd-metric-value">8.8/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Opportunity</div>
-                                <div class="jtbd-metric-value bad">12.4</div>
-                            </div>
-                        </div>
-                        <div class="jtbd-quotes">
-                            <div class="jtbd-quotes-title">Customer Quotes</div>
-                            <div class="jtbd-quote">Took me 3 hours to figure out embeddings dimensions. OpenAI docs are gold standard. (Reddit)</div>
-                        </div>
-                        <div class="jtbd-assessment poor">
-                            <div class="jtbd-assessment-title">How Well Does Mistral Do This Job?</div>
-                            <div class="jtbd-assessment-text">Poor - 3.2/5 docs rating vs 4.5/5 for OpenAI. Biggest gap to close. High impact fix!</div>
-                        </div>
-                    </div>
-
-                    <!-- Job #4 -->
-                    <div class="jtbd-card">
-                        <div class="jtbd-job-title">Job #4: "Help me build reasoning/agentic workflows that actually work"</div>
-                        <div class="jtbd-context">
-                            <strong>Situation:</strong> When I need AI to solve complex, multi-step problems<br>
-                            <strong>Motivation:</strong> I want reliable chain-of-thought reasoning without infinite loops<br>
-                            <strong>Outcome:</strong> So I can build production-grade AI agents
-                        </div>
-                        <div class="jtbd-metrics">
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Frequency</div>
-                                <div class="jtbd-metric-value">67</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Satisfaction</div>
-                                <div class="jtbd-metric-value bad">4.1/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Importance</div>
-                                <div class="jtbd-metric-value">9.2/10</div>
-                            </div>
-                            <div class="jtbd-metric">
-                                <div class="jtbd-metric-label">Opportunity</div>
-                                <div class="jtbd-metric-value bad">14.3</div>
-                            </div>
-                        </div>
-                        <div class="jtbd-quotes">
-                            <div class="jtbd-quotes-title">Customer Quotes</div>
-                            <div class="jtbd-quote">Magistral gets stuck in infinite thinking loop then times out. 128K context too small. (Reddit, 156 upvotes)</div>
-                        </div>
-                        <div class="jtbd-assessment poor">
-                            <div class="jtbd-assessment-title">How Well Does Mistral Do This Job?</div>
-                            <div class="jtbd-assessment-text">Critical Gap - Magistral has quality issues. Highest opportunity score (14.3). Fix ASAP!</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Competitor Intelligence Tab -->
-            <div id="competitor-tab" class="feedback-tab-content">
-                <div class="competitor-container">
-                    <div class="competitor-header">
-                        <div>
-                            <div class="competitor-title">Competitor Intelligence Dashboard</div>
-                            <div class="competitor-subtitle">Aggregated feedback about competitors from GitHub, Reddit, HN, Intercom, and Granola</div>
-                        </div>
-                        <div class="competitor-tabs">
-                            <button class="competitor-tab active" onclick="filterCompetitor('all')">All</button>
-                            <button class="competitor-tab" onclick="filterCompetitor('openai')">OpenAI</button>
-                            <button class="competitor-tab" onclick="filterCompetitor('anthropic')">Anthropic</button>
-                            <button class="competitor-tab" onclick="filterCompetitor('google')">Google</button>
-                        </div>
-                    </div>
-
-                    <div class="competitor-grid">
-                        <!-- OpenAI Card -->
-                        <div class="competitor-card">
-                            <div class="competitor-card-header">
-                                <div class="competitor-logo openai">🤖</div>
-                                <div>
-                                    <div class="competitor-name">OpenAI (GPT-4, GPT-4o)</div>
-                                    <div class="competitor-sentiment neutral">Neutral sentiment</div>
+                        <!-- Overview Sub-tab -->
+                        <div id="d-overview" class="dtab-content active">
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-label">Total Feedback (30d)</div>
+                                    <div class="metric-value">284</div>
+                                    <div class="metric-change positive">↑ 18.3% vs last period</div>
+                                    <div class="metric-meta">From GitHub, Reddit, HN, Intercom, Granola</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Critical Issues</div>
+                                    <div class="metric-value">6</div>
+                                    <div class="metric-change negative">↑ 2 new this week</div>
+                                    <div class="metric-meta">Median resolution: 3.1 days</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">Sentiment Score</div>
+                                    <div class="metric-value">0.62</div>
+                                    <div class="metric-change positive">↑ +0.03</div>
+                                    <div class="metric-meta">Scale: -1 to +1</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-label">ARR at Risk</div>
+                                    <div class="metric-value">$2.4M</div>
+                                    <div class="metric-change negative">4 accounts flagged</div>
+                                    <div class="metric-meta">Based on health score < 60</div>
                                 </div>
                             </div>
-                            <div class="competitor-stats">
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">342</div>
-                                    <div class="competitor-stat-label">Mentions</div>
-                                </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">78</div>
-                                    <div class="competitor-stat-label">Comparisons</div>
-                                </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">23</div>
-                                    <div class="competitor-stat-label">Switch-tos</div>
-                                </div>
-                            </div>
-                            <div class="competitor-feedback-list">
-                                <div class="competitor-feedback-item strength">
-                                    <div class="competitor-feedback-label">Strength</div>
-                                    "Best documentation in the industry" - cited 45x
-                                </div>
-                                <div class="competitor-feedback-item weakness">
-                                    <div class="competitor-feedback-label">Weakness</div>
-                                    "Too expensive for production at scale" - cited 67x
+
+                            <div class="chart-container">
+                                <div class="chart-title">Weighted Priority Queue</div>
+                                <div class="chart-meta">Priority = (Severity × ARR Weight × Recency) • Customer-enriched from Salesforce</div>
+
+                                <div class="feedback-grid" style="margin-top: 1rem;">
+                                    <div class="feedback-card">
+                                        <div class="feedback-header">
+                                            <div class="feedback-title">Rate Limiting Returns Wrong Error Format</div>
+                                            <div class="feedback-badges">
+                                                <span class="badge badge-source">GitHub</span>
+                                                <span class="badge badge-priority">🔴 Critical</span>
+                                                <span class="priority-boosted">↑ +2 Enterprise</span>
+                                            </div>
+                                        </div>
+                                        <div class="feedback-content">"API returns incorrect JSON structure when rate limited, breaking error parsing in production"</div>
+                                        <div class="feedback-meta">
+                                            <span>🐙 pydantic-ai #1885</span>
+                                            <span>📅 Jan 11, 2026</span>
+                                        </div>
+                                        <div class="user-context">
+                                            <span class="badge badge-enterprise">⭐ Enterprise</span>
+                                            <span>💰 $95K ARR</span>
+                                            <span class="badge badge-health-medium">⚠️ Health: 58/100</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="feedback-card">
+                                        <div class="feedback-header">
+                                            <div class="feedback-title">Magistral Infinite Loops on Complex Reasoning</div>
+                                            <div class="feedback-badges">
+                                                <span class="badge badge-source">Reddit</span>
+                                                <span class="badge badge-priority">🔴 Critical</span>
+                                            </div>
+                                        </div>
+                                        <div class="feedback-content">"Getting caught in infinite loops with complex reasoning tasks. Need ability to set more thinking tokens."</div>
+                                        <div class="feedback-meta">
+                                            <span>📍 r/LocalLLaMA</span>
+                                            <span>📅 Jan 10, 2026</span>
+                                            <span>💬 47 upvotes</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="feedback-card">
+                                        <div class="feedback-header">
+                                            <div class="feedback-title">Documentation Quality Gap vs OpenAI</div>
+                                            <div class="feedback-badges">
+                                                <span class="badge badge-source">HN</span>
+                                                <span class="badge badge-priority">🟡 High</span>
+                                            </div>
+                                        </div>
+                                        <div class="feedback-content">"Mistral docs are getting better but still behind OpenAI. Missing practical examples and edge cases."</div>
+                                        <div class="feedback-meta">
+                                            <span>📍 Hacker News</span>
+                                            <span>📅 Jan 8, 2026</span>
+                                            <span>💬 23 points</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Anthropic Card -->
-                        <div class="competitor-card">
-                            <div class="competitor-card-header">
-                                <div class="competitor-logo anthropic">🧠</div>
-                                <div>
-                                    <div class="competitor-name">Anthropic (Claude 3.5)</div>
-                                    <div class="competitor-sentiment positive">Positive sentiment</div>
+                        <!-- Feedback Queue Sub-tab -->
+                        <div id="d-feedback" class="dtab-content">
+                            <div class="chart-container">
+                                <div class="chart-title">Feedback by Category</div>
+                                <div class="chart-meta">AI-categorised using Mistral Small • Click to drill down</div>
+
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                    <div style="background: #fee2e2; padding: 1rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: #991b1b;">42</div>
+                                        <div style="font-size: 0.8rem; color: #991b1b;">Bugs</div>
+                                    </div>
+                                    <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: #1e40af;">89</div>
+                                        <div style="font-size: 0.8rem; color: #1e40af;">Feature Requests</div>
+                                    </div>
+                                    <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: #92400e;">67</div>
+                                        <div style="font-size: 0.8rem; color: #92400e;">Documentation</div>
+                                    </div>
+                                    <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: #065f46;">86</div>
+                                        <div style="font-size: 0.8rem; color: #065f46;">Praise</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="competitor-stats">
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">289</div>
-                                    <div class="competitor-stat-label">Mentions</div>
-                                </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">56</div>
-                                    <div class="competitor-stat-label">Comparisons</div>
-                                </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">18</div>
-                                    <div class="competitor-stat-label">Switch-tos</div>
-                                </div>
-                            </div>
-                            <div class="competitor-feedback-list">
-                                <div class="competitor-feedback-item strength">
-                                    <div class="competitor-feedback-label">Strength</div>
-                                    "Best for coding and long context" - cited 38x
-                                </div>
-                                <div class="competitor-feedback-item weakness">
-                                    <div class="competitor-feedback-label">Weakness</div>
-                                    "No open weights, vendor lock-in" - cited 29x
+
+                            <div class="chart-container">
+                                <div class="chart-title">Feedback by Product Area</div>
+                                <div class="chart-meta">Mapped to engineering teams</div>
+
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 1rem;">
+                                        <span style="width: 120px; font-size: 0.85rem;">API Platform</span>
+                                        <div style="flex: 1; background: #e5e7eb; height: 24px; border-radius: 4px; overflow: hidden;">
+                                            <div style="width: 75%; height: 100%; background: var(--color-accent);"></div>
+                                        </div>
+                                        <span style="font-size: 0.85rem; font-weight: 600;">94</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 1rem;">
+                                        <span style="width: 120px; font-size: 0.85rem;">Models (Large)</span>
+                                        <div style="flex: 1; background: #e5e7eb; height: 24px; border-radius: 4px; overflow: hidden;">
+                                            <div style="width: 60%; height: 100%; background: var(--color-accent);"></div>
+                                        </div>
+                                        <span style="font-size: 0.85rem; font-weight: 600;">76</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 1rem;">
+                                        <span style="width: 120px; font-size: 0.85rem;">Le Chat</span>
+                                        <div style="flex: 1; background: #e5e7eb; height: 24px; border-radius: 4px; overflow: hidden;">
+                                            <div style="width: 45%; height: 100%; background: var(--color-accent);"></div>
+                                        </div>
+                                        <span style="font-size: 0.85rem; font-weight: 600;">58</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 1rem;">
+                                        <span style="width: 120px; font-size: 0.85rem;">Codestral</span>
+                                        <div style="flex: 1; background: #e5e7eb; height: 24px; border-radius: 4px; overflow: hidden;">
+                                            <div style="width: 35%; height: 100%; background: var(--color-accent);"></div>
+                                        </div>
+                                        <span style="font-size: 0.85rem; font-weight: 600;">44</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Google Card -->
-                        <div class="competitor-card">
-                            <div class="competitor-card-header">
-                                <div class="competitor-logo google">🔷</div>
-                                <div>
-                                    <div class="competitor-name">Google (Gemini Pro)</div>
-                                    <div class="competitor-sentiment negative">Negative sentiment</div>
+                        <!-- AI Pipeline Sub-tab -->
+                        <div id="d-pipeline" class="dtab-content">
+                            <div class="chart-container">
+                                <div class="chart-title">AI Processing Pipeline</div>
+                                <div class="chart-meta">How Mistral processes its own feedback using Mistral models</div>
+
+                                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                                    <!-- Pipeline Steps -->
+                                    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                                        <div style="background: #f3f4f6; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px; text-align: center;">
+                                            <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">📥</div>
+                                            <div style="font-weight: 600; font-size: 0.85rem;">Ingest</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">GitHub, Reddit, HN, Intercom</div>
+                                        </div>
+                                        <div style="color: #9ca3af;">→</div>
+                                        <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px; text-align: center;">
+                                            <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">🤖</div>
+                                            <div style="font-weight: 600; font-size: 0.85rem;">Categorise</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Mistral Small</div>
+                                        </div>
+                                        <div style="color: #9ca3af;">→</div>
+                                        <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px; text-align: center;">
+                                            <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">👤</div>
+                                            <div style="font-weight: 600; font-size: 0.85rem;">Enrich</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">Salesforce + Clearbit</div>
+                                        </div>
+                                        <div style="color: #9ca3af;">→</div>
+                                        <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; flex: 1; min-width: 150px; text-align: center;">
+                                            <div style="font-size: 1.25rem; margin-bottom: 0.25rem;">⚖️</div>
+                                            <div style="font-weight: 600; font-size: 0.85rem;">Prioritise</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">ARR × Severity × Recency</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="competitor-stats">
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">156</div>
-                                    <div class="competitor-stat-label">Mentions</div>
+
+                                <!-- Customer Weighting Formula -->
+                                <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; border-radius: 8px; margin-top: 1.5rem;">
+                                    <div style="font-weight: 600; margin-bottom: 0.75rem;">Customer Weighting Formula</div>
+                                    <div style="font-family: monospace; background: white; padding: 0.75rem; border-radius: 4px; font-size: 0.85rem;">
+                                        priority_boost = (ARR / $100K) × tier_multiplier × (1 - days_since/90)
+                                    </div>
+                                    <div style="display: flex; gap: 1.5rem; margin-top: 0.75rem; flex-wrap: wrap; font-size: 0.8rem; color: #6b7280;">
+                                        <span>Enterprise: 2.0×</span>
+                                        <span>Growth: 1.5×</span>
+                                        <span>Pro: 1.2×</span>
+                                        <span>Starter: 1.0×</span>
+                                    </div>
                                 </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">34</div>
-                                    <div class="competitor-stat-label">Comparisons</div>
+
+                                <!-- AI Features -->
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                                    <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 3px solid #f2613f;">
+                                        <strong style="font-size: 0.85rem;">Auto-Categorisation</strong>
+                                        <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">Bug, Feature, Docs, Praise</div>
+                                    </div>
+                                    <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 3px solid #22c55e;">
+                                        <strong style="font-size: 0.85rem;">Sentiment Analysis</strong>
+                                        <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">-1.0 to +1.0 scale</div>
+                                    </div>
+                                    <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 3px solid #8b5cf6;">
+                                        <strong style="font-size: 0.85rem;">Duplicate Detection</strong>
+                                        <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">Mistral Embed similarity</div>
+                                    </div>
+                                    <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                        <strong style="font-size: 0.85rem;">Theme Clustering</strong>
+                                        <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">Auto-group related items</div>
+                                    </div>
                                 </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">8</div>
-                                    <div class="competitor-stat-label">Switch-tos</div>
-                                </div>
-                            </div>
-                            <div class="competitor-feedback-list">
-                                <div class="competitor-feedback-item strength">
-                                    <div class="competitor-feedback-label">Strength</div>
-                                    "Great multimodal and 1M context" - cited 22x
-                                </div>
-                                <div class="competitor-feedback-item weakness">
-                                    <div class="competitor-feedback-label">Weakness</div>
-                                    "Inconsistent quality, weird censorship" - cited 41x
+
+                                <div class="info-box" style="margin-top: 1.5rem;">
+                                    <div style="display: flex; align-items: start; gap: 0.75rem;">
+                                        <span style="font-size: 1.25rem;">💡</span>
+                                        <div>
+                                            <strong>Why Mistral for Our Own Feedback?</strong>
+                                            <span style="display: block; margin-top: 0.25rem;">Dogfooding • Privacy (no 3rd party) • Cost efficiency • Fine-tuned for our domain</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Meta Card -->
-                        <div class="competitor-card">
-                            <div class="competitor-card-header">
-                                <div class="competitor-logo meta">Ⓜ</div>
-                                <div>
-                                    <div class="competitor-name">Meta (Llama 3.1)</div>
-                                    <div class="competitor-sentiment positive">Positive sentiment</div>
-                                </div>
-                            </div>
-                            <div class="competitor-stats">
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">198</div>
-                                    <div class="competitor-stat-label">Mentions</div>
-                                </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">45</div>
-                                    <div class="competitor-stat-label">Comparisons</div>
-                                </div>
-                                <div class="competitor-stat">
-                                    <div class="competitor-stat-value">12</div>
-                                    <div class="competitor-stat-label">Switch-tos</div>
-                                </div>
-                            </div>
-                            <div class="competitor-feedback-list">
-                                <div class="competitor-feedback-item strength">
-                                    <div class="competitor-feedback-label">Strength</div>
-                                    "Open weights + strong performance" - cited 34x
-                                </div>
-                                <div class="competitor-feedback-item weakness">
-                                    <div class="competitor-feedback-label">Weakness</div>
-                                    "Licensing concerns for commercial use" - cited 18x
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Comparison Table -->
-                    <table class="competitor-comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Mistral</th>
-                                <th>OpenAI</th>
-                                <th>Anthropic</th>
-                                <th>Google</th>
-                                <th>Leader</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Pricing</td>
-                                <td><span class="rating-stars">★★★★★</span></td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="rating-stars">★★★★☆</span></td>
-                                <td><span class="rating-stars">★★★★☆</span></td>
-                                <td><span class="winner-badge">Mistral</span></td>
-                            </tr>
-                            <tr>
-                                <td>Documentation</td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="rating-stars">★★★★★</span></td>
-                                <td><span class="rating-stars">★★★★☆</span></td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="winner-badge">OpenAI</span></td>
-                            </tr>
-                            <tr>
-                                <td>Open Source</td>
-                                <td><span class="rating-stars">★★★★★</span></td>
-                                <td><span class="rating-stars">★☆☆☆☆</span></td>
-                                <td><span class="rating-stars">★☆☆☆☆</span></td>
-                                <td><span class="rating-stars">★★☆☆☆</span></td>
-                                <td><span class="winner-badge">Mistral</span></td>
-                            </tr>
-                            <tr>
-                                <td>Reasoning</td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="rating-stars">★★★★★</span></td>
-                                <td><span class="rating-stars">★★★★★</span></td>
-                                <td><span class="rating-stars">★★★★☆</span></td>
-                                <td><span class="winner-badge">Tie: OpenAI/Anthropic</span></td>
-                            </tr>
-                            <tr>
-                                <td>EU Compliance</td>
-                                <td><span class="rating-stars">★★★★★</span></td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="rating-stars">★★★☆☆</span></td>
-                                <td><span class="winner-badge">Mistral</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="opportunity-card">
-                        <div class="opportunity-title">Market Opportunities for Mistral</div>
-                        <ul class="opportunity-list">
-                            <li><strong>OpenAI pricing pain:</strong> 67 mentions of "too expensive" - Mistral's 70% savings resonates</li>
-                            <li><strong>Anthropic lock-in concerns:</strong> 29 mentions - push open weights advantage harder</li>
-                            <li><strong>Documentation gap:</strong> OpenAI is gold standard - close this gap to capture switchers</li>
-                            <li><strong>EU data sovereignty:</strong> Unique advantage - 12 enterprise deals blocked by US cloud fears</li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -4836,7 +4494,7 @@
                 <div class="data-table-container">
                     <div class="data-table-header">
                         <div>
-                            <div class="data-table-title">All Feedback Data</div>
+                            <div class="data-table-title">All Feedback</div>
                             <div class="data-table-meta">247 items from 5 sources | Last synced: 3 min ago</div>
                         </div>
                         <div class="data-table-controls">
@@ -5368,6 +5026,17 @@
 
             // Update tab content
             document.querySelectorAll('.feedback-tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Show dashboard embed sub-tabs
+        function showDashboardTab(tabId) {
+            // Update tab buttons
+            document.querySelectorAll('.dashboard-embed .dtab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.dashboard-embed .dtab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
         }
 
