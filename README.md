@@ -54,31 +54,45 @@ The demo shows the user experience with sample data. The docs below describe how
 
 ### Product Operations Hub
 Main command center with tabs:
-- Overview: key metrics
-- Feedback Dashboard: aggregated customer feedback
-- Launch Calendar: interactive roadmap
-- Launch Checklists: team playbooks
+- **Overview**: Key metrics at a glance
+- **Product Feedback**: Dashboard + All Feedback views (see below)
+- **Launch Calendar**: Interactive 12-month roadmap
+- **Launch Checklists**: Team playbooks by launch type
+- **Product Roadmap**: Sales-Engineering sync view
 
 ### Feedback Dashboard
-Pulls from multiple sources:
+Two tabs with a simple narrative: **Raw feedback → Mistral AI categorises → Customer data enriches → Prioritised queue**
+
+**Dashboard Tab** (3 sub-views):
+- **Overview**: Key metrics (Total Feedback, Critical Issues, Sentiment, ARR at Risk) + Weighted Priority Queue
+- **Feedback Queue**: Breakdown by category and product area (mapped to engineering teams)
+- **AI Pipeline**: Visual flow showing Ingest → Categorise → Enrich → Prioritise
+
+**All Feedback Tab**:
+- Searchable, filterable table of all feedback items
+- Filter by source, category, priority
+- Export to CSV
+
+**Data Sources:**
 
 | Support | Product | Sales |
 |---------|---------|-------|
-| Intercom | Linear | Gong recordings |
-| Zendesk | GitHub Issues | Chorus transcripts |
-| Help Scout | Canny | CRM notes |
+| Intercom | GitHub Issues | Granola transcripts |
+| Zendesk | Linear | CRM notes |
 
-**AI does the heavy lifting:**
-- Categorizes: Bug, Feature Request, Improvement, Question
-- Scores sentiment: Positive/Neutral/Negative
-- Suggests priority based on customer tier + severity
-- Tags with technical keywords and product areas
-- Detects duplicates using embeddings
+**AI Processing (Mistral models):**
+- Auto-categorises: Bug, Feature Request, Docs, Praise
+- Sentiment scoring: -1.0 to +1.0
+- Duplicate detection via Mistral Embed
+- Theme clustering
 
-**Customer enrichment:**
-- Looks up company, ARR, plan from CRM
-- Boosts priority for at-risk customers
-- Shows historical context (previous tickets, requests)
+**Customer-Weighted Prioritisation:**
+```
+priority_boost = (ARR / $100K) × tier_multiplier × (1 - days_since/90)
+```
+- Enterprise: 2.0×, Growth: 1.5×, Pro: 1.2×, Starter: 1.0×
+
+**MVP Implementation:** Can be built with Airtable + Zapier + Mistral API (no engineering dependency)
 
 ### Launch Calendar
 Two views:
@@ -473,21 +487,21 @@ All feedback normalizes to:
 ## Files
 
 ```
-index.html                       # Landing page
-product-ops-hub.html             # Main hub
-dashboard-mockup-v4-real-data.html   # Feedback dashboard
-interactive-launch-calendar.html     # Calendar
-launch-checklist.html            # Checklists
-README.md                        # This file
+index.html                           # Main Product Ops Hub (all-in-one)
+interactive-launch-calendar.html     # Launch calendar (embedded)
+launch-checklist.html                # Launch checklists (embedded)
+dashboard-mockup-v4-real-data.html   # Standalone feedback dashboard (legacy)
+design-program.html                  # Enterprise Design Program Framework
+README.md                            # This file
 ```
 
 ## Try It
 
-1. Open the Hub
-2. Check the Overview tab
-3. Explore Feedback (filter by source, category)
-4. Check Calendar (toggle views, filter by team)
-5. View Checklists (pick a launch type)
+1. Open the [Live Demo](https://joannapedrina.github.io/mistral-product-ops-hub-demo/)
+2. Click **Product Feedback** in the top nav
+3. Explore the Dashboard sub-tabs (Overview, Feedback Queue, AI Pipeline)
+4. Switch to **All Feedback** for the searchable table
+5. Check **Launch Calendar** and **Launch Checklists**
 
 ## Future
 
